@@ -242,6 +242,12 @@
     /* PROJECTS */
     .projects { background: var(--black); }
 
+    .container { max-width: 1400px; margin: 0 auto; }
+
+    section { padding: 100px 60px; max-width: 100%; }
+
+    .section-inner { max-width: 1400px; margin: 0 auto; }
+
     .projects-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
@@ -537,19 +543,94 @@
     ::-webkit-scrollbar-track { background: var(--black); }
     ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
 
+    /* HAMBURGER */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      z-index: 200;
+      background: none;
+      border: none;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* MOBILE MENU */
+    .mobile-menu {
+      display: flex;
+      position: fixed;
+      inset: 0;
+      background: rgba(10,10,10,0.98);
+      z-index: 150;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-20px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .mobile-menu.open {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(0);
+    }
+    .mobile-menu a {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--white);
+      text-decoration: none;
+      transition: color 0.3s, transform 0.3s;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .mobile-menu.open a {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .mobile-menu.open a:nth-child(1) { transition-delay: 0.1s; }
+    .mobile-menu.open a:nth-child(2) { transition-delay: 0.18s; }
+    .mobile-menu.open a:nth-child(3) { transition-delay: 0.26s; }
+    .mobile-menu.open a:nth-child(4) { transition-delay: 0.34s; }
+    .mobile-menu a:hover { color: var(--accent); }
+
     /* RESPONSIVE */
     @media (max-width: 768px) {
       nav { padding: 20px 24px; }
       .nav-links { display: none; }
+      .hamburger { display: flex; }
       .hero { padding: 0 24px 60px; }
       .hero-stats { display: none; }
       section { padding: 70px 24px; }
       .about { grid-template-columns: 1fr; gap: 40px; }
       footer { flex-direction: column; gap: 12px; text-align: center; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .project-img { aspect-ratio: 16/9; }
     }
   </style>
 </head>
 <body>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#projects" onclick="closeMenu()">Projects</a>
+    <a href="#skills" onclick="closeMenu()">Skills</a>
+    <a href="#about" onclick="closeMenu()">About</a>
+    <a href="#contact" onclick="closeMenu()">Contact</a>
+  </div>
 
   <!-- NAV -->
   <nav>
@@ -560,6 +641,11 @@
       <li><a href="#about">About</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </nav>
 
   <!-- HERO -->
@@ -583,7 +669,7 @@
 
     <div class="hero-stats">
       <div class="stat">
-        <div class="stat-num">12+</div>
+        <div class="stat-num">25+</div>
         <div class="stat-label">Live Projects</div>
       </div>
       <div class="stat">
@@ -617,7 +703,7 @@
       </a>
 
       <a href="https://shekharsumanfilmacademy.com" target="_blank" class="project-card">
-        <img src="shekhar.webp" alt="Shekhar Suman Film Academy" class="project-img" />
+        <img src="https://www.developermohit.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fshekhar-suman.08ef83a2.jpg&w=800&q=75" alt="Shekhar Suman Film Academy" class="project-img" />
         <div class="project-overlay">
           <span class="project-tag-pill">Celebrity · Film Academy</span>
           <h3 class="project-name">Shekhar Suman Film Academy</h3>
@@ -627,7 +713,7 @@
       </a>
 
       <a href="https://www.meuzeum.com" target="_blank" class="project-card">
-        <img src="meuzeum.webp" alt="Meuzeum" class="project-img" />
+        <img src="https://www.developermohit.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fduchfam.e1685b80.webp&w=800&q=75" alt="Meuzeum" class="project-img" />
         <div class="project-overlay">
           <span class="project-tag-pill">Fashion · Women's Wear</span>
           <h3 class="project-name">Meuzeum</h3>
@@ -637,7 +723,7 @@
       </a>
 
       <a href="https://carlabraga.in" target="_blank" class="project-card">
-        <img src="carla (1).webp" alt="Carla Braga" class="project-img" />
+        <img src="https://carlabraga.in/cdn/shop/files/share_cb.png?v=1772527983&width=800" alt="Carla Braga" class="project-img" />
         <div class="project-overlay">
           <span class="project-tag-pill">Fashion · Women's Footwear</span>
           <h3 class="project-name">Carla Braga</h3>
@@ -647,7 +733,7 @@
       </a>
 
       <a href="https://www.tarrit.in" target="_blank" class="project-card">
-        <img src="tarrit.webp" alt="Tarrit" class="project-img" />
+        <img src="https://www.tarrit.in/cdn/shop/files/Tarrit_Menswear_49_2294eeb2-1fa7-4a8f-9b5f-aee8a1019492.jpg?v=1774632739" alt="Tarrit" class="project-img" />
         <div class="project-overlay">
           <span class="project-tag-pill">Men's Fashion · Premium</span>
           <h3 class="project-name">Tarrit</h3>
@@ -657,7 +743,7 @@
       </a>
 
       <a href="https://authentikyou.com" target="_blank" class="project-card">
-        <img src="authentik.webp" alt="AuthentikYou" class="project-img" />
+        <img src="https://authentikyou.com/cdn/shop/files/WhatsApp_Image_2025-09-22_at_11.00.41.jpg?v=1758523529" alt="AuthentikYou" class="project-img" />
         <div class="project-overlay">
           <span class="project-tag-pill">Sustainable · Gender-Free Fashion</span>
           <h3 class="project-name">AuthentikYou</h3>
@@ -667,7 +753,7 @@
       </a>
 
       <a href="https://beosam.com" target="_blank" class="project-card">
-        <img src="beosam.webp" alt="BeOsam" class="project-img" />
+        <img src="https://beosam.com/cdn/shop/files/DSC5511_1_11a6b8db-77c0-4960-b30c-421b5d146267.jpg?v=1759561754" alt="BeOsam" class="project-img" />
         <div class="project-overlay">
           <span class="project-tag-pill">Premium · Unisex Fashion</span>
           <h3 class="project-name">BeOsam</h3>
@@ -677,7 +763,7 @@
       </a>
 
       <a href="https://cocuze.com" target="_blank" class="project-card">
-        <img src="cocu.webp" alt="Cocuze" class="project-img" />
+        <img src="https://cocuze.com/cdn/shop/files/Cocuze_banner_featuring_heritage_decor_modern_eclectic_accents_sacred_objects_art_and_handcrafted_furniture.jpg?v=1773660283&width=800" alt="Cocuze" class="project-img" />
         <div class="project-overlay">
           <span class="project-tag-pill">Luxury · Home Décor & Art</span>
           <h3 class="project-name">Cocuzè</h3>
@@ -687,7 +773,7 @@
       </a>
 
       <a href="https://godhulionlinestore.com" target="_blank" class="project-card">
-         <img src="godhuli.webp" alt="godhuli" class="project-img" />
+        <div class="img-placeholder p1" style="background: linear-gradient(135deg, #1a1208, #2e1f0a); display:flex; align-items:center; justify-content:center; aspect-ratio:4/3; font-size:1.2rem; color:#c8a96e;">🌾</div>
         <div class="project-overlay">
           <span class="project-tag-pill">D2C · Online Store</span>
           <h3 class="project-name">Godhuli</h3>
@@ -697,7 +783,7 @@
       </a>
 
       <a href="https://aarbab.com" target="_blank" class="project-card">
-           <img src="aarbab.webp" alt="Aarbab" class="project-img" />
+        <img src="https://aarbab.com/cdn/shop/files/PHOTO-2025-10-16-17-44-36_e1fe8a05-be84-4472-9b09-ec3de4d15cdd.jpg?v=1766300622" alt="Aarbab" class="project-img" />
         <div class="project-overlay">
           <span class="project-tag-pill">Streetwear · Arabic Heritage</span>
           <h3 class="project-name">Aarbab</h3>
@@ -707,7 +793,7 @@
       </a>
 
       <a href="https://sleepnslip.com" target="_blank" class="project-card">
-         <img src="slips.webp" alt="sleepNslip" class="project-img" />
+        <div class="img-placeholder p2" style="background: linear-gradient(135deg, #0d1520, #1a2535); display:flex; align-items:center; justify-content:center; aspect-ratio:4/3; font-size:1.2rem; color:#c8a96e;">🌙</div>
         <div class="project-overlay">
           <span class="project-tag-pill">D2C · Comfort Wear</span>
           <h3 class="project-name">SleepNSlip</h3>
@@ -774,7 +860,7 @@
       <div class="section-tag">About Me</div>
       <h2 class="section-title">Developer.<br />Student.<br />Builder.</h2>
       <p class="about-para">
-        I'm Ajmal Saeed — a B.Tech CSE student in my 3rd year, based in Delhi. I specialise in building e-commerce storefronts on Shopify using custom Liquid code, HTML, CSS, JavaScript.
+        I'm Ajmal Saeed — a B.Tech CSE student in my 3rd year, based in Delhi. I specialise in building e-commerce storefronts on Shopify using custom Liquid code, HTML, CSS, JavaScript and React.
       </p>
       <p class="about-para">
         I've worked on 25+ projects — from celebrity fashion brands to D2C stores. Every store I build is clean, fast, and built to convert.
@@ -824,5 +910,17 @@
     <div class="footer-copy">© 2025 · E-Commerce Frontend Developer · Delhi, India</div>
   </footer>
 
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("mobileMenu");
+      const btn = document.getElementById("hamburger");
+      menu.classList.toggle("open");
+      btn.classList.toggle("open");
+    }
+    function closeMenu() {
+      document.getElementById("mobileMenu").classList.remove("open");
+      document.getElementById("hamburger").classList.remove("open");
+    }
+  </script>
 </body>
 </html>
