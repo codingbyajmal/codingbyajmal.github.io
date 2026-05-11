@@ -673,6 +673,89 @@
       nav.scrolled { padding: 14px 24px; }
       .skills-grid { grid-template-columns: repeat(2, 1fr) !important; }
     }
+
+    /* ===== SCROLL ANIMATIONS ===== */
+    [data-anim] {
+      opacity: 0;
+      transition-property: opacity, transform;
+      transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+      transition-duration: 0.8s;
+    }
+    [data-anim="fade-up"]    { transform: translateY(50px); }
+    [data-anim="fade-down"]  { transform: translateY(-50px); }
+    [data-anim="fade-left"]  { transform: translateX(-50px); }
+    [data-anim="fade-right"] { transform: translateX(50px); }
+    [data-anim="zoom-in"]    { transform: scale(0.85); }
+    [data-anim="fade"]       { transform: none; }
+
+    [data-anim].anim-in {
+      opacity: 1;
+      transform: none !important;
+    }
+
+    /* hero tag pulse */
+    @keyframes pulseBorder {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(200,169,110,0); }
+      50%       { box-shadow: 0 0 0 6px rgba(200,169,110,0.15); }
+    }
+    .hero-tag { animation: fadeUp 0.8s ease both, pulseBorder 3s 1s ease infinite; }
+
+    /* floating line in hero */
+    @keyframes lineDraw {
+      from { height: 0; opacity: 0; }
+      to   { height: 100%; opacity: 0.3; }
+    }
+    .hero-line { animation: lineDraw 1.4s 0.3s ease both; }
+
+    /* stat number count-up feel */
+    @keyframes popIn {
+      0%   { transform: scale(0.5); opacity: 0; }
+      70%  { transform: scale(1.1); }
+      100% { transform: scale(1);   opacity: 1; }
+    }
+    .stat-num { animation: popIn 0.7s ease both; }
+    .stat:nth-child(1) .stat-num { animation-delay: 0.6s; }
+    .stat:nth-child(2) .stat-num { animation-delay: 0.75s; }
+    .stat:nth-child(3) .stat-num { animation-delay: 0.9s; }
+
+    /* about highlight chips */
+    .about-highlight {
+      transition: background 0.3s, color 0.3s, transform 0.3s;
+    }
+    .about-highlight:hover {
+      background: var(--accent);
+      color: var(--black);
+      transform: translateY(-3px);
+    }
+
+    /* section tag underline slide */
+    .section-tag { position: relative; overflow: hidden; }
+
+    /* skill item hover glow */
+    .skill-item:hover .skill-icon {
+      animation: popIn 0.4s ease;
+    }
+
+    /* project card scale on hover */
+    .project-card:hover .project-img {
+      transform: scale(1.08);
+    }
+
+    /* contact buttons pulse */
+    @keyframes glowPulse {
+      0%, 100% { box-shadow: 0 8px 32px rgba(37,211,102,0.25); }
+      50%       { box-shadow: 0 8px 48px rgba(37,211,102,0.5); }
+    }
+    @keyframes glowPulseInsta {
+      0%, 100% { box-shadow: 0 8px 32px rgba(220,39,67,0.25); }
+      50%       { box-shadow: 0 8px 48px rgba(220,39,67,0.5); }
+    }
+    .contact-link.whatsapp  { animation: glowPulse 2.5s ease infinite; }
+    .contact-link.instagram { animation: glowPulseInsta 2.5s 0.5s ease infinite; }
+
+    /* footer fade */
+    footer { opacity: 0; transition: opacity 1s ease; }
+    footer.anim-in { opacity: 1; }
   </style>
 </head>
 <body>
@@ -712,9 +795,9 @@
     <div class="hero-content">
       <span class="hero-tag">Available for Projects · Delhi, India</span>
       <h1 class="hero-name">Ajmal<br /><span>Saeed</span></h1>
-      <p class="hero-title">E-Commerce Frontend Developer</p>
-      <p class="hero-desc">I build custom Shopify stores and e-commerce experiences — clean code, no shortcuts. B.Tech CSE student turning caffeine into conversion-ready storefronts.</p>
-      <div class="hero-cta">
+      <p class="hero-title" data-anim="fade-up" data-delay="100">E-Commerce Frontend Developer</p>
+      <p class="hero-desc" data-anim="fade-up" data-delay="200">I build custom Shopify stores and e-commerce experiences — clean code, no shortcuts. B.Tech CSE student turning caffeine into conversion-ready storefronts.</p>
+      <div class="hero-cta" data-anim="fade-up" data-delay="300">
         <a href="#projects" class="btn-primary">View Projects</a>
         <a href="#contact" class="btn-secondary">Let's Talk</a>
       </div>
@@ -735,13 +818,13 @@
     </div>
   </section>
 
-  <div class="divider"></div>
+  <div class="divider" data-anim="zoom-in" data-delay="0"></div>
 
   <!-- PROJECTS -->
   <section class="projects" id="projects">
     <div class="section-inner">
-      <div class="section-tag reveal">Selected Work</div>
-      <h2 class="section-title reveal">Projects I've<br />Built</h2>
+      <div class="section-tag" data-anim="fade-left" data-delay="0">Selected Work</div>
+      <h2 class="section-title" data-anim="fade-up" data-delay="100">Projects I've<br />Built</h2>
       <div class="projects-grid">
 
         <a href="https://duchesskumari.com" target="_blank" class="project-card">
@@ -871,8 +954,8 @@
   <!-- SKILLS -->
   <section class="skills" id="skills">
     <div class="section-inner">
-      <div class="section-tag reveal">What I Work With</div>
-      <h2 class="section-title reveal">Skills &<br />Technologies</h2>
+      <div class="section-tag" data-anim="fade-left" data-delay="0">What I Work With</div>
+      <h2 class="section-title" data-anim="fade-up" data-delay="100">Skills &<br />Technologies</h2>
       <div class="skills-grid">
         <div class="skill-item">
           <div class="skill-icon">🛍️</div>
@@ -920,12 +1003,12 @@
 
   <!-- ABOUT -->
   <section class="about" id="about">
-    <div class="about-text reveal-left">
-      <div class="section-tag">About Me</div>
-      <h2 class="section-title">Developer.<br />Student.<br />Builder.</h2>
-      <p class="about-para">I'm Ajmal Saeed — a B.Tech CSE student in my 3rd year, based in Delhi. I specialise in building e-commerce storefronts on Shopify using custom Liquid code, HTML, CSS, JavaScript and React.</p>
-      <p class="about-para">I've worked on 25+ projects — from celebrity fashion brands to D2C stores. Every store I build is clean, fast, and built to convert.</p>
-      <div class="about-highlights">
+    <div class="about-text" data-anim="fade-left" data-delay="0">
+      <div class="section-tag" data-anim="fade-left" data-delay="0">About Me</div>
+      <h2 class="section-title" data-anim="fade-up" data-delay="100">Developer.<br />Student.<br />Builder.</h2>
+      <p class="about-para" data-anim="fade-up" data-delay="200">I'm Ajmal Saeed — a B.Tech CSE student in my 3rd year, based in Delhi. I specialise in building e-commerce storefronts on Shopify using custom Liquid code, HTML, CSS, JavaScript and React.</p>
+      <p class="about-para" data-anim="fade-up" data-delay="300">I've worked on 25+ projects — from celebrity fashion brands to D2C stores. Every store I build is clean, fast, and built to convert.</p>
+      <div class="about-highlights" data-anim="fade-up" data-delay="400">
         <span class="about-highlight">🛍️ Shopify Expert</span>
         <span class="about-highlight">⚡ Fast Delivery</span>
         <span class="about-highlight">🎯 Conversion Focused</span>
@@ -955,10 +1038,10 @@
 
   <!-- CONTACT -->
   <section class="contact" id="contact">
-    <div class="section-tag">Get In Touch</div>
-    <h2 class="contact-title">Let's Build<br /><span>Together</span></h2>
-    <p class="contact-sub">Have a Shopify store in mind? Let's talk. I'm available for freelance projects and collaborations.</p>
-    <div class="contact-links">
+    <div class="section-tag" data-anim="fade-up" data-delay="0">Get In Touch</div>
+    <h2 class="contact-title" data-anim="zoom-in" data-delay="100">Let's Build<br /><span>Together</span></h2>
+    <p class="contact-sub" data-anim="fade-up" data-delay="200">Have a Shopify store in mind? Let's talk. I'm available for freelance projects and collaborations.</p>
+    <div class="contact-links" data-anim="fade-up" data-delay="300">
       <a href="https://wa.me/918376909786" target="_blank" class="contact-link whatsapp">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         WhatsApp
@@ -977,6 +1060,7 @@
   </footer>
 
   <script>
+    // Menu
     function toggleMenu() {
       document.getElementById('mobileMenu').classList.toggle('open');
       document.getElementById('hamburger').classList.toggle('open');
@@ -985,42 +1069,45 @@
       document.getElementById('mobileMenu').classList.remove('open');
       document.getElementById('hamburger').classList.remove('open');
     }
-    // Sticky nav bg on scroll
+
+    // Sticky nav
     window.addEventListener('scroll', () => {
-      const nav = document.querySelector('nav');
-      if (window.scrollY > 40) {
-        nav.classList.add('scrolled');
-      } else {
-        nav.classList.remove('scrolled');
-      }
+      document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 40);
     });
 
-    // Scroll reveal
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry, i) => {
+    // Universal scroll reveal
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
         if (entry.isIntersecting) {
-          setTimeout(() => {
-            entry.target.classList.add('visible');
-          }, entry.target.dataset.delay || 0);
+          const delay = parseInt(entry.target.dataset.delay || 0);
+          setTimeout(() => entry.target.classList.add('anim-in'), delay);
+          io.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.1 });
+    }, { threshold: 0.12 });
 
-    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
-      observer.observe(el);
-    });
+    // Observe all data-anim elements
+    document.querySelectorAll('[data-anim]').forEach(el => io.observe(el));
 
     // Stagger project cards
-    document.querySelectorAll('.project-card').forEach((card, i) => {
-      card.dataset.delay = i * 80;
-      observer.observe(card);
+    document.querySelectorAll('.project-card').forEach((el, i) => {
+      el.setAttribute('data-anim', 'fade-up');
+      el.dataset.delay = i * 70;
+      io.observe(el);
     });
 
     // Stagger skill items
-    document.querySelectorAll('.skill-item').forEach((item, i) => {
-      item.dataset.delay = i * 60;
-      observer.observe(item);
+    document.querySelectorAll('.skill-item').forEach((el, i) => {
+      el.setAttribute('data-anim', 'fade-up');
+      el.dataset.delay = i * 60;
+      io.observe(el);
     });
+
+    // Footer
+    const footerObs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('anim-in'); footerObs.unobserve(e.target); } });
+    }, { threshold: 0.2 });
+    footerObs.observe(document.querySelector('footer'));
   </script>
 
 </body>
