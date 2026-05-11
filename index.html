@@ -87,25 +87,32 @@
     /* HAMBURGER */
     .hamburger {
       display: none;
-      flex-direction: column;
-      gap: 5px;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
       cursor: pointer;
-      padding: 4px;
       z-index: 200;
-      background: none;
-      border: none;
+      background: rgba(200,169,110,0.1);
+      border: 1px solid rgba(200,169,110,0.3);
+      border-radius: 50%;
+      transition: background 0.3s;
     }
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
+    .hamburger:hover { background: rgba(200,169,110,0.2); }
+    .hamburger .bar {
+      position: absolute;
+      width: 20px;
+      height: 1.5px;
       background: var(--accent);
       border-radius: 2px;
-      transition: all 0.35s ease;
+      transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
     }
-    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .hamburger .bar:nth-child(1) { transform: translateY(-6px); }
+    .hamburger .bar:nth-child(2) { transform: translateY(0); }
+    .hamburger .bar:nth-child(3) { transform: translateY(6px); }
+    .hamburger.open .bar:nth-child(1) { transform: translateY(0) rotate(45deg); }
+    .hamburger.open .bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open .bar:nth-child(3) { transform: translateY(0) rotate(-45deg); }
 
     /* MOBILE MENU */
     .mobile-menu {
@@ -329,7 +336,7 @@
 
     .project-img {
       width: 100%;
-      aspect-ratio: 4/3;
+      aspect-ratio: 2/3;
       object-fit: cover;
       display: block;
       transition: transform 0.6s ease;
@@ -405,7 +412,7 @@
 
     .skills-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       gap: 1px;
       background: rgba(200,169,110,0.1);
       border: 1px solid rgba(200,169,110,0.1);
@@ -557,9 +564,96 @@
       .hero-stats { display: none; }
       section { padding: 70px 24px; }
       .projects-grid { grid-template-columns: 1fr; }
-      .project-img { aspect-ratio: 16/9; }
+      .project-img { aspect-ratio: 2/3; }
       .about { grid-template-columns: 1fr; gap: 40px; }
       footer { flex-direction: column; gap: 12px; text-align: center; }
+    }
+
+    /* WOW ANIMATIONS */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .project-card {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s;
+    }
+    .project-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .project-card:hover {
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      z-index: 2;
+    }
+    .skill-item {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: background 0.3s, opacity 0.5s ease, transform 0.5s ease;
+    }
+    .skill-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* About extra */
+    .about-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--black);
+      background: var(--accent);
+      padding: 5px 14px;
+      border-radius: 100px;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    .about-highlights {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+    .about-highlight {
+      border: 1px solid rgba(200,169,110,0.3);
+      color: var(--accent);
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+    }
+
+    /* Nav responsive fix */
+    @media (max-width: 768px) {
+      nav.scrolled { padding: 14px 24px; }
+      .skills-grid { grid-template-columns: repeat(2, 1fr) !important; }
     }
   </style>
 </head>
@@ -583,7 +677,7 @@
       <li><a href="#contact">Contact</a></li>
     </ul>
     <button class="hamburger" id="hamburger" onclick="toggleMenu()">
-      <span></span><span></span><span></span>
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div>
     </button>
   </nav>
 
@@ -622,8 +716,8 @@
   <!-- PROJECTS -->
   <section class="projects" id="projects">
     <div class="section-inner">
-      <div class="section-tag">Selected Work</div>
-      <h2 class="section-title">Projects I've<br />Built</h2>
+      <div class="section-tag reveal">Selected Work</div>
+      <h2 class="section-title reveal">Projects I've<br />Built</h2>
       <div class="projects-grid">
 
         <a href="https://duchesskumari.com" target="_blank" class="project-card">
@@ -657,7 +751,7 @@
         </a>
 
         <a href="https://carlabraga.in" target="_blank" class="project-card">
-          <img src="https://carlabraga.in/cdn/shop/files/share_cb.png?v=1772527983&width=800" alt="Carla Braga" class="project-img" />
+          <img src="carla (1).webp" alt="Carla Braga" class="project-img" />
           <div class="project-overlay">
             <span class="project-tag-pill">Fashion · Women's Footwear</span>
             <h3 class="project-name">Carla Braga</h3>
@@ -667,7 +761,7 @@
         </a>
 
         <a href="https://www.tarrit.in" target="_blank" class="project-card">
-          <img src="https://www.tarrit.in/cdn/shop/files/Tarrit_Menswear_49_2294eeb2-1fa7-4a8f-9b5f-aee8a1019492.jpg?v=1774632739" alt="Tarrit" class="project-img" />
+          <img src="tarrit.webp" alt="Tarrit" class="project-img" />
           <div class="project-overlay">
             <span class="project-tag-pill">Men's Fashion · Premium</span>
             <h3 class="project-name">Tarrit</h3>
@@ -677,7 +771,7 @@
         </a>
 
         <a href="https://authentikyou.com" target="_blank" class="project-card">
-          <img src="https://authentikyou.com/cdn/shop/files/WhatsApp_Image_2025-09-22_at_11.00.41.jpg?v=1758523529" alt="AuthentikYou" class="project-img" />
+          <img src="authentik.webp" alt="AuthentikYou" class="project-img" />
           <div class="project-overlay">
             <span class="project-tag-pill">Sustainable · Gender-Free Fashion</span>
             <h3 class="project-name">AuthentikYou</h3>
@@ -687,7 +781,7 @@
         </a>
 
         <a href="https://beosam.com" target="_blank" class="project-card">
-          <img src="https://beosam.com/cdn/shop/files/DSC5511_1_11a6b8db-77c0-4960-b30c-421b5d146267.jpg?v=1759561754" alt="BeOsam" class="project-img" />
+          <img src="beosam.webp" alt="BeOsam" class="project-img" />
           <div class="project-overlay">
             <span class="project-tag-pill">Premium · Unisex Fashion</span>
             <h3 class="project-name">BeOsam</h3>
@@ -697,7 +791,7 @@
         </a>
 
         <a href="https://cocuze.com" target="_blank" class="project-card">
-          <img src="https://cocuze.com/cdn/shop/files/Cocuze_banner_featuring_heritage_decor_modern_eclectic_accents_sacred_objects_art_and_handcrafted_furniture.jpg?v=1773660283&width=800" alt="Cocuze" class="project-img" />
+          <img src="cocu.webp" alt="Cocuze" class="project-img" />
           <div class="project-overlay">
             <span class="project-tag-pill">Luxury · Home Décor & Art</span>
             <h3 class="project-name">Cocuzè</h3>
@@ -707,7 +801,7 @@
         </a>
 
         <a href="https://godhulionlinestore.com" target="_blank" class="project-card">
-          <img src="godhuli.webp" alt="Godhuli" class="project-img" />
+          <img src="godhuli (1).webp" alt="Godhuli" class="project-img" />
           <div class="project-overlay">
             <span class="project-tag-pill">D2C · Online Store</span>
             <h3 class="project-name">Godhuli</h3>
@@ -717,7 +811,7 @@
         </a>
 
         <a href="https://aarbab.com" target="_blank" class="project-card">
-          <img src="https://aarbab.com/cdn/shop/files/PHOTO-2025-10-16-17-44-36_e1fe8a05-be84-4472-9b09-ec3de4d15cdd.jpg?v=1766300622" alt="Aarbab" class="project-img" />
+          <img src="aarbab.webp" alt="Aarbab" class="project-img" />
           <div class="project-overlay">
             <span class="project-tag-pill">Streetwear · Arabic Heritage</span>
             <h3 class="project-name">Aarbab</h3>
@@ -727,7 +821,7 @@
         </a>
 
         <a href="https://sleepnslip.com" target="_blank" class="project-card">
-          <img src="sns.webp" alt="SleepNSlip" class="project-img" />
+          <img src="slips.webp" alt="SleepNSlip" class="project-img" />
           <div class="project-overlay">
             <span class="project-tag-pill">D2C · Comfort Wear</span>
             <h3 class="project-name">SleepNSlip</h3>
@@ -753,8 +847,8 @@
   <!-- SKILLS -->
   <section class="skills" id="skills">
     <div class="section-inner">
-      <div class="section-tag">What I Work With</div>
-      <h2 class="section-title">Skills &<br />Technologies</h2>
+      <div class="section-tag reveal">What I Work With</div>
+      <h2 class="section-title reveal">Skills &<br />Technologies</h2>
       <div class="skills-grid">
         <div class="skill-item">
           <div class="skill-icon">🛍️</div>
@@ -802,13 +896,20 @@
 
   <!-- ABOUT -->
   <section class="about" id="about">
-    <div class="about-text">
+    <div class="about-text reveal-left">
       <div class="section-tag">About Me</div>
       <h2 class="section-title">Developer.<br />Student.<br />Builder.</h2>
       <p class="about-para">I'm Ajmal Saeed — a B.Tech CSE student in my 3rd year, based in Delhi. I specialise in building e-commerce storefronts on Shopify using custom Liquid code, HTML, CSS, JavaScript and React.</p>
       <p class="about-para">I've worked on 25+ projects — from celebrity fashion brands to D2C stores. Every store I build is clean, fast, and built to convert.</p>
+      <div class="about-highlights">
+        <span class="about-highlight">🛍️ Shopify Expert</span>
+        <span class="about-highlight">⚡ Fast Delivery</span>
+        <span class="about-highlight">🎯 Conversion Focused</span>
+        <span class="about-highlight">💬 Client First</span>
+        <span class="about-highlight">🔥 25+ Live Stores</span>
+      </div>
     </div>
-    <div class="about-right">
+    <div class="about-right reveal-right">
       <div class="about-stat-box">
         <div class="about-stat-num">25+</div>
         <div class="about-stat-label">Projects</div>
@@ -868,6 +969,33 @@
       } else {
         nav.classList.remove('scrolled');
       }
+    });
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, entry.target.dataset.delay || 0);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Stagger project cards
+    document.querySelectorAll('.project-card').forEach((card, i) => {
+      card.dataset.delay = i * 80;
+      observer.observe(card);
+    });
+
+    // Stagger skill items
+    document.querySelectorAll('.skill-item').forEach((item, i) => {
+      item.dataset.delay = i * 60;
+      observer.observe(item);
     });
   </script>
 
