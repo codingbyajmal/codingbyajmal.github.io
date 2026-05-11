@@ -1,786 +1,828 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <title>
-    Ajmal Saeed | Shopify Developer
-  </title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
-
+  <title>Ajmal Saeed | Shopify Developer — Delhi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f0eb;
+      --cream: #ede8e1;
+      --accent: #c8a96e;
+      --accent-dark: #a08040;
+      --gray: #6b6560;
+      --light-gray: #d4cfc9;
     }
 
-    :root{
-      --black:#0a0a0a;
-      --white:#f5f0eb;
-      --accent:#c8a96e;
-      --gray:#999;
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
     }
 
-    html{
-      scroll-behavior:smooth;
+    /* NOISE TEXTURE */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
     }
 
-    body{
-      background:var(--black);
-      color:var(--white);
-      font-family:'DM Sans',sans-serif;
-      overflow-x:hidden;
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 60px;
+      background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
     }
 
-    /* NAVBAR */
-
-    nav{
-      position:fixed;
-      top:0;
-      left:0;
-      width:100%;
-      z-index:1000;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:22px 60px;
-      background:rgba(0,0,0,.6);
-      backdrop-filter:blur(18px);
-      border-bottom:1px solid rgba(255,255,255,.06);
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-decoration: none;
     }
 
-    .logo{
-      font-family:'Playfair Display',serif;
-      color:var(--accent);
-      font-size:1.3rem;
-      text-decoration:none;
-      font-weight:700;
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
     }
 
-    .nav-links{
-      display:flex;
-      list-style:none;
-      gap:36px;
+    .nav-links a {
+      color: var(--light-gray);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.3s;
     }
 
-    .nav-links a{
-      text-decoration:none;
-      color:#ddd;
-      font-size:.85rem;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      transition:.3s;
-    }
-
-    .nav-links a:hover{
-      color:var(--accent);
-    }
-
-    /* HAMBURGER */
-
-    .menu-toggle{
-      display:none;
-      font-size:1.8rem;
-      cursor:pointer;
-    }
+    .nav-links a:hover { color: var(--accent); }
 
     /* HERO */
-
-    .hero{
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      padding:120px 60px 80px;
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      padding: 0 60px 80px;
+      position: relative;
+      overflow: hidden;
     }
 
-    .hero-content{
-      max-width:800px;
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 50%, rgba(200, 169, 110, 0.08) 0%, transparent 60%),
+                  radial-gradient(ellipse at 20% 80%, rgba(200, 169, 110, 0.05) 0%, transparent 50%);
     }
 
-    .hero-tag{
-      display:inline-block;
-      padding:8px 18px;
-      border-radius:999px;
-      border:1px solid rgba(200,169,110,.35);
-      color:var(--accent);
-      margin-bottom:28px;
-      font-size:.75rem;
-      text-transform:uppercase;
-      letter-spacing:.1em;
+    .hero-line {
+      position: absolute;
+      top: 0; right: 120px;
+      width: 1px;
+      height: 100%;
+      background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+      opacity: 0.3;
     }
 
-    .hero h1{
-      font-size:clamp(4rem,10vw,7rem);
-      line-height:1;
-      font-family:'Playfair Display',serif;
-      margin-bottom:10px;
+    .hero-content { position: relative; z-index: 2; max-width: 800px; }
+
+    .hero-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(200,169,110,0.3);
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 32px;
+      animation: fadeUp 0.8s ease both;
     }
 
-    .hero h1 span{
-      color:var(--accent);
+    .hero-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+      animation: fadeUp 0.8s 0.1s ease both;
     }
 
-    .hero-sub{
-      color:#aaa;
-      font-size:1.5rem;
-      margin-bottom:25px;
-      font-style:italic;
+    .hero-name span { color: var(--accent); }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--gray);
+      margin-bottom: 32px;
+      animation: fadeUp 0.8s 0.2s ease both;
     }
 
-    .hero-desc{
-      color:#ccc;
-      line-height:1.9;
-      max-width:550px;
-      margin-bottom:40px;
+    .hero-desc {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--light-gray);
+      max-width: 480px;
+      margin-bottom: 48px;
+      animation: fadeUp 0.8s 0.3s ease both;
     }
 
-    .hero-btns{
-      display:flex;
-      gap:16px;
-      flex-wrap:wrap;
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      animation: fadeUp 0.8s 0.4s ease both;
     }
 
-    .btn{
-      padding:14px 30px;
-      border-radius:999px;
-      text-decoration:none;
-      transition:.3s;
-      font-size:.9rem;
+    .btn-primary {
+      background: var(--accent);
+      color: var(--black);
+      padding: 14px 36px;
+      border-radius: 100px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      transition: background 0.3s, transform 0.2s;
     }
 
-    .btn-primary{
-      background:var(--accent);
-      color:#000;
-      font-weight:700;
-      box-shadow:0 10px 30px rgba(200,169,110,.2);
+    .btn-primary:hover { background: var(--accent-dark); transform: translateY(-2px); }
+
+    .btn-secondary {
+      border: 1px solid rgba(200,169,110,0.4);
+      color: var(--accent);
+      padding: 14px 36px;
+      border-radius: 100px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      transition: all 0.3s;
     }
 
-    .btn-primary:hover{
-      transform:translateY(-3px);
+    .btn-secondary:hover { background: rgba(200,169,110,0.1); transform: translateY(-2px); }
+
+    .hero-stats {
+      position: absolute;
+      right: 60px;
+      bottom: 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      animation: fadeUp 0.8s 0.5s ease both;
     }
 
-    .btn-outline{
-      border:1px solid rgba(200,169,110,.35);
-      color:var(--accent);
+    .stat { text-align: right; }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
     }
-
-    .btn-outline:hover{
-      background:rgba(200,169,110,.08);
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--gray);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 4px;
     }
 
     /* SECTION */
+    section { padding: 100px 60px; }
 
-    section{
-      padding:100px 60px;
+    .section-tag {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
-    .section-tag{
-      color:var(--accent);
-      text-transform:uppercase;
-      letter-spacing:.14em;
-      font-size:.75rem;
-      margin-bottom:18px;
+    .section-tag::before {
+      content: '';
+      width: 30px;
+      height: 1px;
+      background: var(--accent);
     }
 
-    .section-title{
-      font-family:'Playfair Display',serif;
-      font-size:clamp(2.5rem,6vw,4rem);
-      line-height:1.1;
-      margin-bottom:60px;
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 60px;
     }
 
     /* PROJECTS */
+    .projects { background: var(--black); }
 
-    .projects-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
-      gap:28px;
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 2px;
     }
 
-    .project-card{
-      position:relative;
-      overflow:hidden;
-      border-radius:22px;
-      background:#111;
-      transition:.4s ease;
-      box-shadow:0 10px 35px rgba(0,0,0,.35);
-      text-decoration:none;
-      color:#fff;
+    .project-card {
+      position: relative;
+      overflow: hidden;
+      background: #111;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
     }
 
-    .project-card:hover{
-      transform:translateY(-6px);
+    .project-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+      background: #1a1a1a;
     }
 
-    .project-img{
-      width:100%;
-      height:340px;
-      object-fit:contain;
-      object-position:center;
-      background:#0f0f0f;
-      padding:14px;
-      transition:transform .5s ease;
+    .project-card:hover .project-img { transform: scale(1.05); }
+
+    .project-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.3) 50%, transparent 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 32px;
+      transform: translateY(8px);
+      transition: transform 0.4s ease;
     }
 
-    .project-card:hover .project-img{
-      transform:scale(1.03);
+    .project-card:hover .project-overlay { transform: translateY(0); }
+
+    .project-tag-pill {
+      display: inline-block;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(200,169,110,0.4);
+      padding: 4px 12px;
+      border-radius: 100px;
+      margin-bottom: 12px;
+      width: fit-content;
     }
 
-    .project-overlay{
-      position:absolute;
-      inset:0;
-      background:linear-gradient(
-        to top,
-        rgba(0,0,0,.96) 0%,
-        rgba(0,0,0,.35) 50%,
-        transparent 100%
-      );
-      padding:28px;
-      display:flex;
-      flex-direction:column;
-      justify-content:flex-end;
+    .project-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 8px;
     }
 
-    .project-tag{
-      width:fit-content;
-      padding:6px 12px;
-      border-radius:999px;
-      border:1px solid rgba(200,169,110,.35);
-      color:var(--accent);
-      font-size:.7rem;
-      margin-bottom:12px;
-      backdrop-filter:blur(10px);
+    .project-desc {
+      font-size: 0.85rem;
+      color: var(--light-gray);
+      line-height: 1.6;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all 0.4s ease 0.1s;
     }
 
-    .project-name{
-      font-size:1.7rem;
-      font-family:'Playfair Display',serif;
-      margin-bottom:10px;
+    .project-card:hover .project-desc { opacity: 1; transform: translateY(0); }
+
+    .project-arrow {
+      position: absolute;
+      top: 24px; right: 24px;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: rgba(200,169,110,0.15);
+      border: 1px solid rgba(200,169,110,0.3);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent);
+      font-size: 1rem;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.3s;
     }
 
-    .project-desc{
-      color:#ddd;
-      line-height:1.7;
-      font-size:.9rem;
+    .project-card:hover .project-arrow { opacity: 1; transform: scale(1); }
+
+    /* PLACEHOLDER IMAGES */
+    .img-placeholder {
+      width: 100%;
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: var(--gray);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
     }
+
+    .img-placeholder.p1 { background: linear-gradient(135deg, #1a1510, #2a2018); }
+    .img-placeholder.p2 { background: linear-gradient(135deg, #0f1520, #1a2535); }
+    .img-placeholder.p3 { background: linear-gradient(135deg, #151520, #202030); }
 
     /* SKILLS */
+    .skills { background: #0d0d0d; }
 
-    .skills-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:20px;
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1px;
+      background: rgba(200,169,110,0.1);
+      border: 1px solid rgba(200,169,110,0.1);
     }
 
-    .skill-box{
-      background:#111;
-      padding:30px;
-      border-radius:20px;
+    .skill-item {
+      background: #0d0d0d;
+      padding: 36px 32px;
+      transition: background 0.3s;
     }
 
-    .skill-box h3{
-      margin:15px 0 10px;
-      font-family:'Playfair Display',serif;
+    .skill-item:hover { background: rgba(200,169,110,0.05); }
+
+    .skill-icon {
+      font-size: 1.8rem;
+      margin-bottom: 16px;
     }
 
-    .skill-box p{
-      color:#aaa;
-      line-height:1.7;
-      font-size:.9rem;
+    .skill-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .skill-desc {
+      font-size: 0.8rem;
+      color: var(--gray);
+      line-height: 1.6;
     }
 
     /* ABOUT */
-
-    .about{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:60px;
-      align-items:center;
+    .about {
+      background: var(--black);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
     }
 
-    .about p{
-      color:#ccc;
-      line-height:1.9;
-      margin-bottom:20px;
+    .about-text .section-title { margin-bottom: 24px; }
+
+    .about-para {
+      font-size: 1rem;
+      line-height: 1.9;
+      color: var(--light-gray);
+      margin-bottom: 20px;
     }
 
-    .stats{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:20px;
+    .about-right {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: rgba(200,169,110,0.1);
     }
 
-    .stat-box{
-      background:#111;
-      padding:35px;
-      border-radius:20px;
-      text-align:center;
+    .about-stat-box {
+      background: #0d0d0d;
+      padding: 40px 32px;
+      text-align: center;
     }
 
-    .stat-box h3{
-      font-size:2.5rem;
-      color:var(--accent);
-      margin-bottom:8px;
-      font-family:'Playfair Display',serif;
+    .about-stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .about-stat-label {
+      font-size: 0.8rem;
+      color: var(--gray);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
     }
 
     /* CONTACT */
-
-    .contact{
-      text-align:center;
+    .contact {
+      background: #0d0d0d;
+      text-align: center;
     }
 
-    .contact h2 span{
-      color:var(--accent);
+    .contact .section-tag { justify-content: center; }
+    .contact .section-tag::before { display: none; }
+
+    .contact-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 24px;
     }
 
-    .contact-sub{
-      color:#aaa;
-      max-width:500px;
-      margin:auto;
-      line-height:1.8;
+    .contact-title span { color: var(--accent); }
+
+    .contact-sub {
+      font-size: 1rem;
+      color: var(--gray);
+      margin-bottom: 48px;
+      max-width: 420px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.7;
     }
 
-    .contact-links{
-      display:flex;
-      justify-content:center;
-      gap:20px;
-      flex-wrap:wrap;
-      margin-top:35px;
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
     }
 
-    .contact-links a{
-      text-decoration:none;
-      padding:14px 28px;
-      border-radius:999px;
-      font-weight:700;
-      transition:.3s;
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 100px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      transition: all 0.3s;
     }
 
-    .contact-links a:hover{
-      transform:translateY(-4px);
+    .contact-link.whatsapp {
+      background: #25D366;
+      color: #000;
+      font-weight: 500;
     }
 
-    .whatsapp{
-      background:#25D366;
-      color:#000;
+    .contact-link.whatsapp:hover { background: #1db954; transform: translateY(-2px); }
+
+    .contact-link.instagram {
+      background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+      color: #fff;
+      font-weight: 500;
     }
 
-    .instagram{
-      background:linear-gradient(45deg,#f09433,#dc2743,#bc1888);
-      color:#fff;
-    }
+    .contact-link.instagram:hover { opacity: 0.9; transform: translateY(-2px); }
 
     /* FOOTER */
-
-    footer{
-      padding:35px;
-      text-align:center;
-      border-top:1px solid rgba(255,255,255,.08);
-      color:#777;
-      font-size:.9rem;
+    footer {
+      padding: 32px 60px;
+      border-top: 1px solid rgba(200,169,110,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    /* MOBILE */
-
-    @media(max-width:768px){
-
-      nav{
-        padding:20px;
-      }
-
-      .menu-toggle{
-        display:block;
-      }
-
-      .nav-links{
-        position:absolute;
-        top:80px;
-        right:20px;
-        background:#111;
-        flex-direction:column;
-        width:220px;
-        padding:22px;
-        border-radius:18px;
-        gap:22px;
-        display:none;
-        border:1px solid rgba(255,255,255,.06);
-      }
-
-      .nav-links.active{
-        display:flex;
-      }
-
-      .hero{
-        padding:120px 22px 80px;
-      }
-
-      section{
-        padding:70px 20px;
-      }
-
-      .about{
-        grid-template-columns:1fr;
-      }
-
-      .projects-grid{
-        grid-template-columns:1fr;
-      }
-
-      .project-img{
-        height:240px;
-        padding:10px;
-      }
-
-      .hero h1{
-        font-size:4rem;
-      }
-
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      color: var(--accent);
+      font-size: 1rem;
+      font-weight: 700;
     }
 
+    .footer-copy {
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+
+    /* DIVIDER */
+    .divider {
+      width: 60px;
+      height: 1px;
+      background: var(--accent);
+      margin: 0 60px 0;
+      opacity: 0.4;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 20px 24px; }
+      .nav-links { display: none; }
+      .hero { padding: 0 24px 60px; }
+      .hero-stats { display: none; }
+      section { padding: 70px 24px; }
+      .about { grid-template-columns: 1fr; gap: 40px; }
+      footer { flex-direction: column; gap: 12px; text-align: center; }
+    }
   </style>
-
 </head>
-
 <body>
 
-  <!-- NAVBAR -->
-
+  <!-- NAV -->
   <nav>
-
-    <a href="#" class="logo">
-      Ajmal.
-    </a>
-
-    <div class="menu-toggle" id="menu-toggle">
-      ☰
-    </div>
-
-    <ul class="nav-links" id="nav-links">
+    <a href="#" class="nav-logo">Ajmal.</a>
+    <ul class="nav-links">
       <li><a href="#projects">Projects</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
-
   </nav>
 
   <!-- HERO -->
-
   <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-line"></div>
 
     <div class="hero-content">
-
-      <div class="hero-tag">
-        Available for Projects · Delhi, India
-      </div>
-
-      <h1>
-        Ajmal <br>
-        <span>Saeed</span>
-      </h1>
-
-      <div class="hero-sub">
-        Shopify Frontend Developer
-      </div>
-
+      <span class="hero-tag">Available for Projects · Delhi, India</span>
+      <h1 class="hero-name">Ajmal<br /><span>Saeed</span></h1>
+      <p class="hero-title">E-Commerce Frontend Developer</p>
       <p class="hero-desc">
-        I build premium Shopify stores and e-commerce experiences —
-        modern, fast and conversion-focused.
+        I build custom Shopify stores and e-commerce experiences — clean code, no shortcuts.
+        B.Tech CSE student turning caffeine into conversion-ready storefronts.
       </p>
-
-      <div class="hero-btns">
-
-        <a href="#projects" class="btn btn-primary">
-          View Projects
-        </a>
-
-        <a href="#contact" class="btn btn-outline">
-          Let's Talk
-        </a>
-
+      <div class="hero-cta">
+        <a href="#projects" class="btn-primary">View Projects</a>
+        <a href="#contact" class="btn-secondary">Let's Talk</a>
       </div>
-
     </div>
 
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">12+</div>
+        <div class="stat-label">Live Projects</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">3rd</div>
+        <div class="stat-label">Year B.Tech</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Lines of Code</div>
+      </div>
+    </div>
   </section>
 
+  <div class="divider"></div>
+
   <!-- PROJECTS -->
-
   <section class="projects" id="projects">
+    <div class="section-tag">Selected Work</div>
+    <h2 class="section-title">Projects I've<br />Built</h2>
 
-  <div class="section-tag">Selected Work</div>
+    <div class="projects-grid">
 
-  <h2 class="section-title">Projects I've<br>Built</h2>
+      <a href="https://duchesskumari.com" target="_blank" class="project-card">
+        <img src="https://duchesskumari.com/cdn/shop/files/new-pic3.jpg?v=1775729479&width=800" alt="Duchess Kumari" class="project-img" />
+        <div class="project-overlay">
+          <span class="project-tag-pill">Celebrity Brand · Fashion</span>
+          <h3 class="project-name">Duchess Kumari</h3>
+          <p class="project-desc">Luxury fashion store co-founded by Alka Suman, Miss Universe India Divita Rai & Adhyayan Suman. Custom Shopify with sets feature & shop-the-look.</p>
+        </div>
+        <div class="project-arrow">↗</div>
+      </a>
 
-  <div class="projects-grid">
+      <a href="https://shekharsumanfilmacademy.com" target="_blank" class="project-card">
+        <img src="https://www.developermohit.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fshekhar-suman.08ef83a2.jpg&w=800&q=75" alt="Shekhar Suman Film Academy" class="project-img" />
+        <div class="project-overlay">
+          <span class="project-tag-pill">Celebrity · Film Academy</span>
+          <h3 class="project-name">Shekhar Suman Film Academy</h3>
+          <p class="project-desc">Digital home for one of Indian cinema's most recognised names. Custom-coded from scratch with seamless admission flow & optimised performance.</p>
+        </div>
+        <div class="project-arrow">↗</div>
+      </a>
 
-    <a href="https://duchesskumari.com" target="_blank" class="project-card">
-      <img src="https://duchesskumari.com/cdn/shop/files/new-pic3.jpg?v=1775729479&width=800" class="project-img">
-      <div class="project-overlay">
-        <div class="project-tag">Celebrity Brand · Fashion</div>
-        <div class="project-name">Duchess Kumari</div>
-        <div class="project-desc">Luxury fashion store with shop-the-look system.</div>
-      </div>
-    </a>
+      <a href="https://www.meuzeum.com" target="_blank" class="project-card">
+        <img src="https://www.developermohit.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fduchfam.e1685b80.webp&w=800&q=75" alt="Meuzeum" class="project-img" />
+        <div class="project-overlay">
+          <span class="project-tag-pill">Fashion · Women's Wear</span>
+          <h3 class="project-name">Meuzeum</h3>
+          <p class="project-desc">Custom Shopify storefront for a women's fashion brand — built for speed, style, and seamless shopping experience.</p>
+        </div>
+        <div class="project-arrow">↗</div>
+      </a>
 
-    <a href="https://shekharsumanfilmacademy.com" target="_blank" class="project-card">
-      <img src="./shekhar.webp" class="project-img">
-      <div class="project-overlay">
-        <div class="project-tag">Celebrity · Film Academy</div>
-        <div class="project-name">Shekhar Suman Film Academy</div>
-        <div class="project-desc">Custom admission + branding website.</div>
-      </div>
-    </a>
+      <a href="https://carlabraga.in" target="_blank" class="project-card">
+        <img src="https://carlabraga.in/cdn/shop/files/share_cb.png?v=1772527983&width=800" alt="Carla Braga" class="project-img" />
+        <div class="project-overlay">
+          <span class="project-tag-pill">Fashion · Women's Footwear</span>
+          <h3 class="project-name">Carla Braga</h3>
+          <p class="project-desc">Women's fashion & footwear Shopify store with custom theme, smooth navigation and conversion-focused layout.</p>
+        </div>
+        <div class="project-arrow">↗</div>
+      </a>
 
-    <a href="https://www.meuzeum.com" target="_blank" class="project-card">
-      <img src="./meuzeum.webp" class="project-img">
-      <div class="project-overlay">
-        <div class="project-tag">Fashion · Women</div>
-        <div class="project-name">Meuzeum</div>
-        <div class="project-desc">Premium Shopify fashion store.</div>
-      </div>
-    </a>
+      <a href="https://www.tarrit.in" target="_blank" class="project-card">
+        <img src="https://www.tarrit.in/cdn/shop/files/Tarrit_Menswear_49_2294eeb2-1fa7-4a8f-9b5f-aee8a1019492.jpg?v=1774632739" alt="Tarrit" class="project-img" />
+        <div class="project-overlay">
+          <span class="project-tag-pill">Men's Fashion · Premium</span>
+          <h3 class="project-name">Tarrit</h3>
+          <p class="project-desc">Premium men's shirts brand — Egyptian Giza cotton to Linen. Minimal, refined Shopify store built for a discerning audience.</p>
+        </div>
+        <div class="project-arrow">↗</div>
+      </a>
 
-    <a href="https://carlabraga.in" target="_blank" class="project-card">
-      <img src="carla (1).webp" class="project-img">
-      <div class="project-overlay">
-        <div class="project-tag">Fashion · Footwear</div>
-        <div class="project-name">Carla Braga</div>
-        <div class="project-desc">Luxury footwear Shopify store.</div>
-      </div>
-    </a>
+      <a href="https://authentikyou.com" target="_blank" class="project-card">
+        <img src="https://authentikyou.com/cdn/shop/files/WhatsApp_Image_2025-09-22_at_11.00.41.jpg?v=1758523529" alt="AuthentikYou" class="project-img" />
+        <div class="project-overlay">
+          <span class="project-tag-pill">Sustainable · Gender-Free Fashion</span>
+          <h3 class="project-name">AuthentikYou</h3>
+          <p class="project-desc">Inclusive, gender-free clothing brand focused on sustainability. Custom Shopify store celebrating individuality.</p>
+        </div>
+        <div class="project-arrow">↗</div>
+      </a>
 
-    <a href="https://www.tarrit.in" target="_blank" class="project-card">
-      <img src="https://www.tarrit.in/cdn/shop/files/Tarrit_Menswear_49_2294eeb2.jpg" class="project-img">
-      <div class="project-overlay">
-        <div class="project-tag">Men's Fashion</div>
-        <div class="project-name">Tarrit</div>
-        <div class="project-desc">Premium menswear brand store.</div>
-      </div>
-    </a>
+      <a href="https://beosam.com" target="_blank" class="project-card">
+        <img src="https://beosam.com/cdn/shop/files/DSC5511_1_11a6b8db-77c0-4960-b30c-421b5d146267.jpg?v=1759561754" alt="BeOsam" class="project-img" />
+        <div class="project-overlay">
+          <span class="project-tag-pill">Premium · Unisex Fashion</span>
+          <h3 class="project-name">BeOsam</h3>
+          <p class="project-desc">Premium unisex clothing brand — luxury fabric, purposeful design. Custom Shopify store built for comfort and style.</p>
+        </div>
+        <div class="project-arrow">↗</div>
+      </a>
 
-    <a href="https://authentikyou.com" target="_blank" class="project-card">
-      <img src="https://authentikyou.com/cdn/shop/files/WhatsApp_Image.jpg" class="project-img">
-      <div class="project-overlay">
-        <div class="project-tag">Sustainable Fashion</div>
-        <div class="project-name">AuthentikYou</div>
-        <div class="project-desc">Gender-free sustainable clothing brand.</div>
-      </div>
-    </a>
+      <a href="https://cocuze.com" target="_blank" class="project-card">
+        <img src="https://cocuze.com/cdn/shop/files/Cocuze_banner_featuring_heritage_decor_modern_eclectic_accents_sacred_objects_art_and_handcrafted_furniture.jpg?v=1773660283&width=800" alt="Cocuze" class="project-img" />
+        <div class="project-overlay">
+          <span class="project-tag-pill">Luxury · Home Décor & Art</span>
+          <h3 class="project-name">Cocuzè</h3>
+          <p class="project-desc">Regenerative design, home décor and gifts shaped by India's craft heritage. Conscious luxury Shopify store.</p>
+        </div>
+        <div class="project-arrow">↗</div>
+      </a>
 
-    <a href="https://beosam.com" target="_blank" class="project-card">
-      <img src="https://beosam.com/cdn/shop/files/DSC5511.jpg" class="project-img">
-      <div class="project-overlay">
-        <div class="project-tag">Premium Fashion</div>
-        <div class="project-name">BeOsam</div>
-        <div class="project-desc">Luxury unisex clothing brand.</div>
-      </div>
-    </a>
+      <a href="https://godhulionlinestore.com" target="_blank" class="project-card">
+        <div class="img-placeholder p1" style="background: linear-gradient(135deg, #1a1208, #2e1f0a); display:flex; align-items:center; justify-content:center; aspect-ratio:4/3; font-size:1.2rem; color:#c8a96e;">🌾</div>
+        <div class="project-overlay">
+          <span class="project-tag-pill">D2C · Online Store</span>
+          <h3 class="project-name">Godhuli</h3>
+          <p class="project-desc">Custom Shopify storefront with clean design and seamless shopping experience.</p>
+        </div>
+        <div class="project-arrow">↗</div>
+      </a>
 
-    <a href="https://cocuze.com" target="_blank" class="project-card">
-      <img src="https://cocuze.com/cdn/shop/files/banner.jpg" class="project-img">
-      <div class="project-overlay">
-        <div class="project-tag">Luxury Home Decor</div>
-        <div class="project-name">Cocuzè</div>
-        <div class="project-desc">Heritage-inspired luxury decor brand.</div>
-      </div>
-    </a>
+      <a href="https://aarbab.com" target="_blank" class="project-card">
+        <img src="https://aarbab.com/cdn/shop/files/PHOTO-2025-10-16-17-44-36_e1fe8a05-be84-4472-9b09-ec3de4d15cdd.jpg?v=1766300622" alt="Aarbab" class="project-img" />
+        <div class="project-overlay">
+          <span class="project-tag-pill">Streetwear · Arabic Heritage</span>
+          <h3 class="project-name">Aarbab</h3>
+          <p class="project-desc">Premium streetwear rooted in Arabic culture. "Aarbab" means boss — a mindset brand with a bold custom Shopify store.</p>
+        </div>
+        <div class="project-arrow">↗</div>
+      </a>
 
-    <a href="https://godhulionlinestore.com" target="_blank" class="project-card">
-      <img src="./godhuli.webp" class="project-img">
-      <div class="project-overlay">
-        <div class="project-tag">D2C Store</div>
-        <div class="project-name">Godhuli</div>
-        <div class="project-desc">Clean rural-inspired brand store.</div>
-      </div>
-    </a>
+      <a href="https://sleepnslip.com" target="_blank" class="project-card">
+        <div class="img-placeholder p2" style="background: linear-gradient(135deg, #0d1520, #1a2535); display:flex; align-items:center; justify-content:center; aspect-ratio:4/3; font-size:1.2rem; color:#c8a96e;">🌙</div>
+        <div class="project-overlay">
+          <span class="project-tag-pill">D2C · Comfort Wear</span>
+          <h3 class="project-name">SleepNSlip</h3>
+          <p class="project-desc">Cozy comfort wear D2C brand. Custom Shopify store with smooth category navigation and clean UX.</p>
+        </div>
+        <div class="project-arrow">↗</div>
+      </a>
 
-    <a href="https://aarbab.com" target="_blank" class="project-card">
-      <img src="https://aarbab.webp" class="project-img">
-      <div class="project-overlay">
-        <div class="project-tag">Streetwear</div>
-        <div class="project-name">Aarbab</div>
-        <div class="project-desc">Arabic-inspired streetwear brand.</div>
-      </div>
-    </a>
+      <a href="https://www.crockerywala.com" target="_blank" class="project-card">
+        <img src="https://www.crockerywala.com/cdn/shop/files/aiposter_2025-04-01-123509.png?v=1743501331" alt="CrockeryWala" class="project-img" />
+        <div class="project-overlay">
+          <span class="project-tag-pill">Home & Kitchen · Copper & Brass</span>
+          <h3 class="project-name">CrockeryWala</h3>
+          <p class="project-desc">Premium copper, bronze & brass kitchenware store. Custom Shopify with rich product catalogue and fast-loading pages.</p>
+        </div>
+        <div class="project-arrow">↗</div>
+      </a>
 
-    <a href="https://sleepnslip.com" target="_blank" class="project-card">
-      <img src="./sns.webp" class="project-img">
-      <div class="project-overlay">
-        <div class="project-tag">Comfort Wear</div>
-        <div class="project-name">SleepNSlip</div>
-        <div class="project-desc">Cozy sleepwear D2C brand.</div>
-      </div>
-    </a>
-
-    <a href="https://www.crockerywala.com" target="_blank" class="project-card">
-      <img src="https://www.crockerywala.com/cdn/shop/files/aiposter.png" class="project-img">
-      <div class="project-overlay">
-        <div class="project-tag">Home & Kitchen</div>
-        <div class="project-name">CrockeryWala</div>
-        <div class="project-desc">Premium brass & copper kitchenware store.</div>
-      </div>
-    </a>
-
-  </div>
-
-</section>
-  <!-- SKILLS -->
-
-  <section id="skills">
-
-    <div class="section-tag">
-      Skills
     </div>
+  </section>
 
-    <h2 class="section-title">
-      Technologies I Work With
-    </h2>
+  <!-- SKILLS -->
+  <section class="skills" id="skills">
+    <div class="section-tag">What I Work With</div>
+    <h2 class="section-title">Skills &<br />Technologies</h2>
 
     <div class="skills-grid">
-
-      <div class="skill-box">
-        <div>🛍️</div>
-        <h3>Shopify</h3>
-        <p>Custom Shopify storefronts and premium themes.</p>
+      <div class="skill-item">
+        <div class="skill-icon">🛍️</div>
+        <div class="skill-name">Shopify</div>
+        <div class="skill-desc">Custom themes, storefronts & e-commerce solutions built from scratch</div>
       </div>
-
-      <div class="skill-box">
-        <div>💧</div>
-        <h3>Liquid</h3>
-        <p>Dynamic Shopify Liquid templating and custom sections.</p>
+      <div class="skill-item">
+        <div class="skill-icon">💧</div>
+        <div class="skill-name">Liquid</div>
+        <div class="skill-desc">Shopify's templating language for dynamic, data-driven stores</div>
       </div>
-
-      <div class="skill-box">
-        <div>⚛️</div>
-        <h3>React</h3>
-        <p>Interactive frontend interfaces and modern UI systems.</p>
+      <div class="skill-item">
+        <div class="skill-icon">⚛️</div>
+        <div class="skill-name">React</div>
+        <div class="skill-desc">Modern UI components and interactive frontend experiences</div>
       </div>
-
-      <div class="skill-box">
-        <div>⚡</div>
-        <h3>JavaScript</h3>
-        <p>Custom interactions and frontend functionality.</p>
+      <div class="skill-item">
+        <div class="skill-icon">▲</div>
+        <div class="skill-name">Next.js</div>
+        <div class="skill-desc">Fast, SEO-friendly web apps with server-side rendering</div>
       </div>
-
+      <div class="skill-item">
+        <div class="skill-icon">🎨</div>
+        <div class="skill-name">HTML & CSS</div>
+        <div class="skill-desc">Pixel-perfect, responsive layouts with clean markup</div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-icon">⚡</div>
+        <div class="skill-name">JavaScript</div>
+        <div class="skill-desc">Dynamic interactions, custom features & logic</div>
+      </div>
     </div>
-
   </section>
 
   <!-- ABOUT -->
-
-  <section id="about">
-
-    <div class="about">
-
-      <div>
-
-        <div class="section-tag">
-          About Me
-        </div>
-
-        <h2 class="section-title">
-          Developer.<br>
-          Student.<br>
-          Builder.
-        </h2>
-
-        <p>
-          I'm Ajmal Saeed — a B.Tech CSE student and Shopify frontend developer based in Delhi.
-        </p>
-
-        <p>
-          I create premium e-commerce experiences using Shopify, Liquid, React,
-          HTML, CSS and JavaScript.
-        </p>
-
-      </div>
-
-      <div class="stats">
-
-        <div class="stat-box">
-          <h3>25+</h3>
-          <p>Projects</p>
-        </div>
-
-        <div class="stat-box">
-          <h3>3rd</h3>
-          <p>B.Tech Year</p>
-        </div>
-
-        <div class="stat-box">
-          <h3>Delhi</h3>
-          <p>Based In</p>
-        </div>
-
-        <div class="stat-box">
-          <h3>∞</h3>
-          <p>Passion</p>
-        </div>
-
-      </div>
-
+  <section class="about" id="about">
+    <div class="about-text">
+      <div class="section-tag">About Me</div>
+      <h2 class="section-title">Developer.<br />Student.<br />Builder.</h2>
+      <p class="about-para">
+        I'm Ajmal Saeed — a B.Tech CSE student in my 3rd year, based in Delhi. I specialise in building e-commerce storefronts on Shopify using custom Liquid code, HTML, CSS, JavaScript and React.
+      </p>
+      <p class="about-para">
+        I've worked on 25+ projects — from celebrity fashion brands to D2C stores. Every store I build is clean, fast, and built to convert.
+      </p>
     </div>
 
+    <div class="about-right">
+      <div class="about-stat-box">
+        <div class="about-stat-num">25+</div>
+        <div class="about-stat-label">Projects</div>
+      </div>
+      <div class="about-stat-box">
+        <div class="about-stat-num">3rd</div>
+        <div class="about-stat-label">B.Tech Year</div>
+      </div>
+      <div class="about-stat-box">
+        <div class="about-stat-num">Delhi</div>
+        <div class="about-stat-label">Based In</div>
+      </div>
+      <div class="about-stat-box">
+        <div class="about-stat-num">∞</div>
+        <div class="about-stat-label">Passion</div>
+      </div>
+    </div>
   </section>
 
   <!-- CONTACT -->
-
   <section class="contact" id="contact">
-
-    <div class="section-tag">
-      Contact
-    </div>
-
-    <h2 class="section-title">
-      Let's Build <span>Together</span>
-    </h2>
-
+    <div class="section-tag">Get In Touch</div>
+    <h2 class="contact-title">Let's Build<br /><span>Together</span></h2>
     <p class="contact-sub">
-      Have a Shopify project in mind?
-      Let's create something premium together.
+      Have a Shopify store in mind? Let's talk. I'm available for freelance projects and collaborations.
     </p>
-
     <div class="contact-links">
-
-      <a href="https://wa.me/918376909786" target="_blank" class="whatsapp">
-        WhatsApp
+      <a href="https://wa.me/918376909786" target="_blank" class="contact-link whatsapp">
+        💬 WhatsApp
       </a>
-
-      <a href="https://www.instagram.com/codingbyajmal" target="_blank" class="instagram">
-        Instagram
+      <a href="https://www.instagram.com/codingbyajmal" target="_blank" class="contact-link instagram">
+        📸 Instagram
       </a>
-
     </div>
-
   </section>
 
   <!-- FOOTER -->
-
   <footer>
-    © 2025 Ajmal Saeed · Shopify Frontend Developer
+    <div class="footer-logo">Ajmal Saeed</div>
+    <div class="footer-copy">© 2025 · E-Commerce Frontend Developer · Delhi, India</div>
   </footer>
 
-  <script>
-
-    const toggle = document.getElementById("menu-toggle");
-    const nav = document.getElementById("nav-links");
-
-    toggle.addEventListener("click", () => {
-      nav.classList.toggle("active");
-    });
-
-  </script>
-
 </body>
-
 </html>
