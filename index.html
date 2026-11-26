@@ -1,1072 +1,299 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ajmal Saeed | Shopify Developer — Delhi</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    :root {
-      --black: #0a0a0a;
-      --white: #f5f0eb;
-      --cream: #ede8e1;
-      --accent: #c8a96e;
-      --accent-dark: #a08040;
-      --gray: #6b6560;
-      --light-gray: #d4cfc9;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--black);
-      color: var(--white);
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 300;
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 9999;
-      opacity: 0.4;
-    }
-
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 28px 60px;
-      background: transparent;
-      transition: background 0.4s ease, padding 0.4s ease, box-shadow 0.4s ease;
-    }
-    nav.scrolled {
-      background: rgba(10,10,10,0.97);
-      padding: 16px 60px;
-      box-shadow: 0 1px 0 rgba(200,169,110,0.15);
-      backdrop-filter: blur(12px);
-    }
-
-    .nav-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--accent);
-      letter-spacing: 0.05em;
-      text-decoration: none;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 40px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--light-gray);
-      text-decoration: none;
-      font-size: 0.85rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      transition: color 0.3s;
-    }
-
-    .nav-links a:hover { color: var(--accent); }
-
-    .hamburger {
-      display: none;
-      align-items: center;
-      justify-content: center;
-      width: 44px;
-      height: 44px;
-      cursor: pointer;
-      z-index: 200;
-      background: rgba(200,169,110,0.1);
-      border: 1px solid rgba(200,169,110,0.3);
-      border-radius: 50%;
-      transition: background 0.3s;
-    }
-    .hamburger:hover { background: rgba(200,169,110,0.2); }
-    .hamburger .bar {
-      position: absolute;
-      width: 20px;
-      height: 1.5px;
-      background: var(--accent);
-      border-radius: 2px;
-      transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
-    }
-    .hamburger .bar:nth-child(1) { transform: translateY(-6px); }
-    .hamburger .bar:nth-child(2) { transform: translateY(0); }
-    .hamburger .bar:nth-child(3) { transform: translateY(6px); }
-    .hamburger.open .bar:nth-child(1) { transform: translateY(0) rotate(45deg); }
-    .hamburger.open .bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
-    .hamburger.open .bar:nth-child(3) { transform: translateY(0) rotate(-45deg); }
-
-    .mobile-menu {
-      display: flex;
-      position: fixed;
-      inset: 0;
-      background: rgba(10,10,10,0.98);
-      z-index: 150;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 48px;
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(-16px);
-      transition: opacity 0.4s ease, transform 0.4s ease;
-    }
-    .mobile-menu.open { opacity: 1; pointer-events: all; transform: translateY(0); }
-    .mobile-menu a {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.8rem;
-      font-weight: 700;
-      color: var(--white);
-      text-decoration: none;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: color 0.3s, opacity 0.35s ease, transform 0.35s ease;
-    }
-    .mobile-menu.open a { opacity: 1; transform: translateY(0); }
-    .mobile-menu.open a:nth-child(2) { transition-delay: 0.08s; }
-    .mobile-menu.open a:nth-child(3) { transition-delay: 0.16s; }
-    .mobile-menu.open a:nth-child(4) { transition-delay: 0.24s; }
-    .mobile-menu.open a:nth-child(5) { transition-delay: 0.32s; }
-    .mobile-menu a:hover { color: var(--accent); }
-
-    .menu-close {
-      position: absolute;
-      top: 28px; right: 28px;
-      width: 48px; height: 48px;
-      border-radius: 50%;
-      background: rgba(200,169,110,0.15);
-      border: 1px solid rgba(200,169,110,0.4);
-      color: var(--accent);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.3s;
-    }
-    .menu-close:hover { background: rgba(200,169,110,0.3); transform: rotate(90deg); }
-
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: flex-end;
-      padding: 0 60px 80px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 70% 50%, rgba(200,169,110,0.08) 0%, transparent 60%),
-                  radial-gradient(ellipse at 20% 80%, rgba(200,169,110,0.05) 0%, transparent 50%);
-    }
-
-    .hero-line {
-      position: absolute;
-      top: 0; right: 120px;
-      width: 1px; height: 100%;
-      background: linear-gradient(to bottom, transparent, var(--accent), transparent);
-      opacity: 0.3;
-    }
-
-    .hero-content { position: relative; z-index: 2; max-width: 800px; }
-
-    .hero-tag {
-      display: inline-block;
-      font-size: 0.75rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--accent);
-      border: 1px solid rgba(200,169,110,0.3);
-      padding: 6px 16px;
-      border-radius: 100px;
-      margin-bottom: 32px;
-      animation: fadeUp 0.8s ease both, pulseBorder 3s 1s ease infinite;
-    }
-
-    .hero-name {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(3.5rem, 8vw, 7rem);
-      font-weight: 900;
-      line-height: 1;
-      letter-spacing: -0.02em;
-      margin-bottom: 8px;
-      animation: fadeUp 0.8s 0.1s ease both;
-    }
-    .hero-name span { color: var(--accent); }
-
-    .hero-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.2rem, 3vw, 2rem);
-      font-weight: 400;
-      font-style: italic;
-      color: var(--gray);
-      margin-bottom: 32px;
-      animation: fadeUp 0.8s 0.2s ease both;
-    }
-
-    .hero-desc {
-      font-size: 1rem;
-      line-height: 1.8;
-      color: var(--light-gray);
-      max-width: 480px;
-      margin-bottom: 48px;
-      animation: fadeUp 0.8s 0.3s ease both;
-    }
-
-    .hero-cta {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      animation: fadeUp 0.8s 0.4s ease both;
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: var(--black);
-      padding: 14px 36px;
-      border-radius: 100px;
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      letter-spacing: 0.05em;
-      transition: background 0.3s, transform 0.2s;
-    }
-    .btn-primary:hover { background: var(--accent-dark); transform: translateY(-2px); }
-
-    .btn-secondary {
-      border: 1px solid rgba(200,169,110,0.4);
-      color: var(--accent);
-      padding: 14px 36px;
-      border-radius: 100px;
-      text-decoration: none;
-      font-size: 0.9rem;
-      letter-spacing: 0.05em;
-      transition: all 0.3s;
-    }
-    .btn-secondary:hover { background: rgba(200,169,110,0.1); transform: translateY(-2px); }
-
-    .hero-stats {
-      position: absolute;
-      right: 60px; bottom: 80px;
-      display: flex;
-      flex-direction: column;
-      gap: 32px;
-      animation: fadeUp 0.8s 0.5s ease both;
-    }
-
-    .stat { text-align: right; }
-    .stat-num {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: var(--accent);
-      line-height: 1;
-      animation: popIn 0.7s ease both;
-    }
-    .stat:nth-child(1) .stat-num { animation-delay: 0.6s; }
-    .stat:nth-child(2) .stat-num { animation-delay: 0.75s; }
-    .stat:nth-child(3) .stat-num { animation-delay: 0.9s; }
-    .stat-label {
-      font-size: 0.75rem;
-      color: var(--gray);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-top: 4px;
-    }
-
-    section { padding: 100px 60px; }
-    .section-inner { max-width: 1400px; margin: 0 auto; }
-
-    .section-tag {
-      font-size: 0.72rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .section-tag::before { content: ''; width: 30px; height: 1px; background: var(--accent); }
-
-    .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 4vw, 3.5rem);
-      font-weight: 700;
-      line-height: 1.1;
-      margin-bottom: 60px;
-    }
-
-    .projects { background: var(--black); }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-    }
-
-    .project-card {
-      position: relative;
-      overflow: hidden;
-      background: #111;
-      cursor: pointer;
-      text-decoration: none;
-      color: inherit;
-      display: block;
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s;
-    }
-    .project-card.anim-in { opacity: 1; transform: translateY(0); }
-    .project-card:hover { box-shadow: 0 20px 60px rgba(0,0,0,0.5); z-index: 2; }
-
-    .project-img {
-      width: 100%;
-      aspect-ratio: 2/3;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.6s ease;
-      background: #1a1a1a;
-    }
-    .project-card:hover .project-img { transform: scale(1.08); }
-
-    .project-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.3) 50%, transparent 100%);
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 32px;
-      transform: translateY(8px);
-      transition: transform 0.4s ease;
-    }
-    .project-card:hover .project-overlay { transform: translateY(0); }
-
-    .project-tag-pill {
-      display: inline-block;
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--accent);
-      border: 1px solid rgba(200,169,110,0.4);
-      padding: 4px 12px;
-      border-radius: 100px;
-      margin-bottom: 12px;
-      width: fit-content;
-    }
-
-    .project-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.6rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .project-desc {
-      font-size: 0.85rem;
-      color: var(--light-gray);
-      line-height: 1.6;
-      opacity: 0;
-      transform: translateY(8px);
-      transition: all 0.4s ease 0.1s;
-    }
-    .project-card:hover .project-desc { opacity: 1; transform: translateY(0); }
-
-    .project-arrow {
-      position: absolute;
-      top: 24px; right: 24px;
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      background: rgba(200,169,110,0.15);
-      border: 1px solid rgba(200,169,110,0.3);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--accent);
-      font-size: 1rem;
-      opacity: 0;
-      transform: scale(0.8);
-      transition: all 0.3s;
-    }
-    .project-card:hover .project-arrow { opacity: 1; transform: scale(1); }
-
-    .skills { background: #0d0d0d; }
-
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1px;
-      background: rgba(200,169,110,0.1);
-      border: 1px solid rgba(200,169,110,0.1);
-    }
-
-    .skill-item {
-      background: #0d0d0d;
-      padding: 36px 32px;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: background 0.3s, opacity 0.5s ease, transform 0.5s ease;
-    }
-    .skill-item.anim-in { opacity: 1; transform: translateY(0); }
-    .skill-item:hover { background: rgba(200,169,110,0.05); }
-    .skill-item:hover .skill-icon { animation: popIn 0.4s ease; }
-
-    .skill-icon { font-size: 1.8rem; margin-bottom: 16px; }
-    .skill-name { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
-    .skill-desc { font-size: 0.8rem; color: var(--gray); line-height: 1.6; }
-
-    /* ── ABOUT SECTION ── */
-    .about {
-      background: var(--black);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: center;
-      padding: 100px 60px;
-    }
-
-    .about-photo {
-      display: flex;
-      justify-content: center;
-    }
-
-    .about-photo-frame {
-      position: relative;
-      width: 340px;
-      max-width: 100%;
-    }
-
-    .about-photo-img {
-      width: 100%;
-      aspect-ratio: 3/4;
-      object-fit: cover;
-      object-position: top;
-      display: block;
-      border-radius: 4px;
-      border: 2px solid rgba(200,169,110,0.4);
-      filter: grayscale(20%);
-      transition: filter 0.4s ease, transform 0.4s ease;
-    }
-
-    .about-photo-frame:hover .about-photo-img {
-      filter: grayscale(0%);
-      transform: scale(1.01);
-    }
-
-    .about-photo-frame::before {
-      content: '';
-      position: absolute;
-      inset: -10px;
-      border: 1px solid rgba(200,169,110,0.15);
-      border-radius: 4px;
-      pointer-events: none;
-    }
-
-    .about-photo-badge {
-      position: absolute;
-      bottom: -16px;
-      right: -16px;
-      background: var(--accent);
-      color: var(--black);
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Playfair Display', serif;
-      box-shadow: 0 0 0 4px var(--black), 0 0 0 5px rgba(200,169,110,0.3);
-    }
-
-    .about-photo-badge span {
-      font-size: 1.3rem;
-      font-weight: 900;
-      line-height: 1;
-    }
-
-    .about-photo-badge small {
-      font-size: 0.55rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 500;
-    }
-
-    .about-text .section-title { margin-bottom: 24px; }
-    .about-para { font-size: 1rem; line-height: 1.9; color: var(--light-gray); margin-bottom: 20px; }
-
-    .about-highlights { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
-    .about-highlight {
-      border: 1px solid rgba(200,169,110,0.3);
-      color: var(--accent);
-      padding: 6px 16px;
-      border-radius: 100px;
-      font-size: 0.8rem;
-      letter-spacing: 0.06em;
-      transition: background 0.3s, color 0.3s, transform 0.3s;
-    }
-    .about-highlight:hover { background: var(--accent); color: var(--black); transform: translateY(-3px); }
-
-    .contact { background: #0d0d0d; text-align: center; }
-    .contact .section-tag { justify-content: center; }
-    .contact .section-tag::before { display: none; }
-
-    .contact-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.5rem, 6vw, 5rem);
-      font-weight: 900;
-      line-height: 1.1;
-      margin-bottom: 24px;
-    }
-    .contact-title span { color: var(--accent); }
-
-    .contact-sub {
-      font-size: 1rem;
-      color: var(--gray);
-      margin-bottom: 48px;
-      max-width: 420px;
-      margin-left: auto;
-      margin-right: auto;
-      line-height: 1.7;
-    }
-
-    .contact-links { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
-
-    .contact-link {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 18px 40px;
-      border-radius: 100px;
-      text-decoration: none;
-      font-size: 1rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      transition: all 0.3s;
-    }
-    .contact-link.whatsapp {
-      background: #25D366;
-      color: #000;
-      box-shadow: 0 8px 32px rgba(37,211,102,0.25);
-      animation: glowPulse 2.5s ease infinite;
-    }
-    .contact-link.whatsapp:hover { background: #1db954; transform: translateY(-3px); }
-    .contact-link.instagram {
-      background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-      color: #fff;
-      box-shadow: 0 8px 32px rgba(220,39,67,0.25);
-      animation: glowPulseInsta 2.5s 0.5s ease infinite;
-    }
-    .contact-link.instagram:hover { opacity: 0.9; transform: translateY(-3px); }
-
-    footer {
-      padding: 32px 60px;
-      border-top: 1px solid rgba(200,169,110,0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      opacity: 0;
-      transition: opacity 1s ease;
-    }
-    footer.anim-in { opacity: 1; }
-    .footer-logo { font-family: 'Playfair Display', serif; color: var(--accent); font-size: 1rem; font-weight: 700; }
-    .footer-copy { font-size: 0.8rem; color: var(--gray); }
-
-    .divider { width: 60px; height: 1px; background: var(--accent); margin: 0 60px; opacity: 0.4; }
-
-    [data-anim] {
-      opacity: 0;
-      transition-property: opacity, transform;
-      transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-      transition-duration: 0.8s;
-    }
-    [data-anim="fade-up"]    { transform: translateY(50px); }
-    [data-anim="fade-left"]  { transform: translateX(-50px); }
-    [data-anim="fade-right"] { transform: translateX(50px); }
-    [data-anim="zoom-in"]    { transform: scale(0.85); }
-    [data-anim].anim-in { opacity: 1; transform: none !important; }
-
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 70% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
-    @keyframes pulseBorder { 0%,100% { box-shadow: 0 0 0 0 rgba(200,169,110,0); } 50% { box-shadow: 0 0 0 6px rgba(200,169,110,0.15); } }
-    @keyframes lineDraw { from { height: 0; opacity: 0; } to { height: 100%; opacity: 0.3; } }
-    @keyframes glowPulse { 0%,100% { box-shadow: 0 8px 32px rgba(37,211,102,0.25); } 50% { box-shadow: 0 8px 48px rgba(37,211,102,0.5); } }
-    @keyframes glowPulseInsta { 0%,100% { box-shadow: 0 8px 32px rgba(220,39,67,0.25); } 50% { box-shadow: 0 8px 48px rgba(220,39,67,0.5); } }
-
-    .hero-line { animation: lineDraw 1.4s 0.3s ease both; }
-
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: var(--black); }
-    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
-
-    @media (max-width: 768px) {
-      nav { padding: 20px 24px; }
-      nav.scrolled { padding: 14px 24px; }
-      .nav-links { display: none; }
-      .hamburger { display: flex; }
-      .hero { padding: 0 24px 60px; }
-      .hero-stats { display: none; }
-      section { padding: 70px 24px; }
-      .projects-grid { grid-template-columns: 1fr; }
-      .project-img { aspect-ratio: 2/3; }
-      .skills-grid { grid-template-columns: repeat(2, 1fr) !important; }
-      .about {
-        grid-template-columns: 1fr;
-        gap: 50px;
-        padding: 70px 24px;
-      }
-      .about-photo-frame {
-        width: 220px;
-        margin: 0 auto;
-      }
-      footer { flex-direction: column; gap: 12px; text-align: center; padding: 24px; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ajmal Saeed | Shopify Developer — Delhi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--black:#0a0a0a;--white:#f5f0eb;--accent:#c8a96e;--accent-dark:#a08040;--gray:#6b6560;--light-gray:#d4cfc9}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.4}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:28px 60px;transition:background .4s,padding .4s,box-shadow .4s}
+nav.scrolled{background:rgba(10,10,10,.97);padding:16px 60px;box-shadow:0 1px 0 rgba(200,169,110,.15);backdrop-filter:blur(12px)}
+.nav-logo{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--accent);letter-spacing:.05em;text-decoration:none}
+.nav-links{display:flex;gap:40px;list-style:none}
+.nav-links a{color:var(--light-gray);text-decoration:none;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;transition:color .3s}
+.nav-links a:hover{color:var(--accent)}
+.hamburger{display:none;align-items:center;justify-content:center;position:relative;width:44px;height:44px;cursor:pointer;z-index:200;background:rgba(200,169,110,.1);border:1px solid rgba(200,169,110,.3);border-radius:50%}
+.hamburger .bar{position:absolute;width:20px;height:1.5px;background:var(--accent);border-radius:2px;transition:all .35s}
+.hamburger .bar:nth-child(1){transform:translateY(-6px)}
+.hamburger .bar:nth-child(3){transform:translateY(6px)}
+.hamburger.open .bar:nth-child(1){transform:rotate(45deg)}
+.hamburger.open .bar:nth-child(2){opacity:0}
+.hamburger.open .bar:nth-child(3){transform:rotate(-45deg)}
+.mobile-menu{display:flex;position:fixed;inset:0;background:rgba(10,10,10,.98);z-index:150;flex-direction:column;align-items:center;justify-content:center;gap:48px;opacity:0;pointer-events:none;transform:translateY(-16px);transition:opacity .4s,transform .4s}
+.mobile-menu.open{opacity:1;pointer-events:all;transform:none}
+.mobile-menu a{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:700;color:var(--white);text-decoration:none}
+.mobile-menu a:hover{color:var(--accent)}
+.menu-close{position:absolute;top:28px;right:28px;width:48px;height:48px;border-radius:50%;background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.4);color:var(--accent);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.hero{min-height:100vh;display:flex;align-items:flex-end;padding:0 60px 80px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(200,169,110,.08),transparent 60%),radial-gradient(ellipse at 20% 80%,rgba(200,169,110,.05),transparent 50%)}
+.hero-line{position:absolute;top:0;right:120px;width:1px;height:100%;background:linear-gradient(to bottom,transparent,var(--accent),transparent);opacity:.3}
+.hero-content{position:relative;z-index:2;max-width:800px}
+.hero-tag{display:inline-block;font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(200,169,110,.3);padding:6px 16px;border-radius:100px;margin-bottom:32px;animation:fadeUp .8s both}
+.hero-name{font-family:'Playfair Display',serif;font-size:clamp(3.5rem,8vw,7rem);font-weight:900;line-height:1;letter-spacing:-.02em;margin-bottom:8px;animation:fadeUp .8s .1s both}
+.hero-name span{color:var(--accent)}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(1.2rem,3vw,2rem);font-style:italic;color:var(--gray);margin-bottom:32px;animation:fadeUp .8s .2s both}
+.hero-desc{line-height:1.8;color:var(--light-gray);max-width:480px;margin-bottom:48px;animation:fadeUp .8s .3s both}
+.hero-cta{display:flex;gap:16px;flex-wrap:wrap;animation:fadeUp .8s .4s both}
+.btn-primary{background:var(--accent);color:var(--black);padding:14px 36px;border-radius:100px;text-decoration:none;font-size:.9rem;font-weight:500;transition:background .3s,transform .2s}
+.btn-primary:hover{background:var(--accent-dark);transform:translateY(-2px)}
+.btn-secondary{border:1px solid rgba(200,169,110,.4);color:var(--accent);padding:14px 36px;border-radius:100px;text-decoration:none;font-size:.9rem;transition:all .3s}
+.btn-secondary:hover{background:rgba(200,169,110,.1);transform:translateY(-2px)}
+.hero-stats{position:absolute;right:60px;bottom:80px;display:flex;flex-direction:column;gap:32px;animation:fadeUp .8s .5s both}
+.stat{text-align:right}
+.stat-num{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:700;color:var(--accent);line-height:1}
+.stat-label{font-size:.75rem;color:var(--gray);letter-spacing:.1em;text-transform:uppercase;margin-top:4px}
+section{padding:100px 60px}
+.section-inner{max-width:1400px;margin:0 auto}
+.section-tag{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.section-tag::before{content:'';width:30px;height:1px;background:var(--accent)}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:700;line-height:1.1;margin-bottom:60px}
+.projects-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.project-card{position:relative;overflow:hidden;background:#111;color:inherit;text-decoration:none;display:block;opacity:0;transform:translateY(30px);transition:opacity .6s,transform .6s,box-shadow .3s}
+.project-card.anim-in{opacity:1;transform:none}
+.project-card:hover{box-shadow:0 20px 60px rgba(0,0,0,.5);z-index:2}
+.project-card{background:linear-gradient(160deg,#1a1712,#0d0d0d)}
+.project-card::before{content:attr(data-name);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;font-family:'Playfair Display',serif;font-size:1.8rem;color:rgba(200,169,110,.35)}
+.project-img{position:relative;width:100%;aspect-ratio:2/3;object-fit:cover;display:block;transition:transform .6s;background:#1a1a1a}
+.project-card:hover .project-img{transform:scale(1.08)}
+.project-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,10,10,.95),rgba(10,10,10,.3) 50%,transparent);display:flex;flex-direction:column;justify-content:flex-end;padding:32px}
+.project-tag-pill{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(200,169,110,.4);padding:4px 12px;border-radius:100px;margin-bottom:12px;width:fit-content}
+.project-name{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;margin-bottom:8px}
+.project-desc{font-size:.85rem;color:var(--light-gray);line-height:1.6;opacity:0;transform:translateY(8px);transition:all .4s .1s}
+.project-card:hover .project-desc,.project-card:focus-visible .project-desc{opacity:1;transform:none}
+.project-arrow{position:absolute;top:24px;right:24px;width:40px;height:40px;border-radius:50%;background:rgba(200,169,110,.15);border:1px solid rgba(200,169,110,.3);display:flex;align-items:center;justify-content:center;color:var(--accent);opacity:0;transform:scale(.8);transition:all .3s}
+.project-card:hover .project-arrow{opacity:1;transform:scale(1)}
+@media (hover:none){.project-desc{opacity:1;transform:none}}
+.skills{background:#0d0d0d}
+.skills-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(200,169,110,.1);border:1px solid rgba(200,169,110,.1)}
+.skill-item{background:#0d0d0d;padding:36px 32px;opacity:0;transform:translateY(20px);transition:background .3s,opacity .5s,transform .5s}
+.skill-item.anim-in{opacity:1;transform:none}
+.skill-item:hover{background:rgba(200,169,110,.05)}
+.skill-icon{font-size:1.8rem;margin-bottom:16px}
+.skill-name{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;margin-bottom:8px}
+.skill-desc{font-size:.8rem;color:var(--gray);line-height:1.6}
+.about{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.about-photo{display:flex;justify-content:center}
+.about-photo-frame{position:relative;width:340px;max-width:100%}
+.about-photo-img{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:top;display:block;border-radius:4px;border:2px solid rgba(200,169,110,.4);filter:grayscale(20%);transition:filter .4s}
+.about-photo-frame:hover .about-photo-img{filter:none}
+.about-photo-frame::before{content:'';position:absolute;inset:-10px;border:1px solid rgba(200,169,110,.15);border-radius:4px;pointer-events:none}
+.about-photo-badge{position:absolute;bottom:-16px;right:-16px;background:var(--accent);color:var(--black);width:80px;height:80px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Playfair Display',serif;box-shadow:0 0 0 4px var(--black)}
+.about-photo-badge span{font-size:1.3rem;font-weight:900;line-height:1}
+.about-photo-badge small{font-size:.55rem;letter-spacing:.08em;text-transform:uppercase;font-family:'DM Sans',sans-serif;font-weight:500}
+.about-text .section-title{margin-bottom:24px}
+.about-para{line-height:1.9;color:var(--light-gray);margin-bottom:20px}
+.about-highlights{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.about-highlight{border:1px solid rgba(200,169,110,.3);color:var(--accent);padding:6px 16px;border-radius:100px;font-size:.8rem;transition:all .3s}
+.about-highlight:hover{background:var(--accent);color:var(--black);transform:translateY(-3px)}
+.contact{background:#0d0d0d;text-align:center}
+.contact .section-tag{justify-content:center}
+.contact .section-tag::before{display:none}
+.contact-title{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:900;line-height:1.1;margin-bottom:24px}
+.contact-title span{color:var(--accent)}
+.contact-sub{color:var(--gray);margin:0 auto 48px;max-width:420px;line-height:1.7}
+.contact-links{display:flex;justify-content:center;gap:16px;flex-wrap:wrap}
+.contact-link{display:flex;align-items:center;gap:12px;padding:18px 40px;border-radius:100px;text-decoration:none;font-weight:600;transition:all .3s}
+.contact-link.whatsapp{background:#25D366;color:#000;animation:glow 2.5s infinite}
+.contact-link.instagram{background:linear-gradient(135deg,#f09433,#dc2743,#bc1888);color:#fff}
+.contact-link:hover{transform:translateY(-3px)}
+footer{padding:32px 60px;border-top:1px solid rgba(200,169,110,.1);display:flex;justify-content:space-between;align-items:center}
+.footer-logo{font-family:'Playfair Display',serif;color:var(--accent);font-weight:700}
+.footer-copy{font-size:.8rem;color:var(--gray)}
+.divider{width:60px;height:1px;background:var(--accent);margin:0 60px;opacity:.4}
+[data-anim]{opacity:0;transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1)}
+[data-anim=fade-up]{transform:translateY(50px)}
+[data-anim=fade-left]{transform:translateX(-50px)}
+[data-anim=zoom-in]{transform:scale(.85)}
+[data-anim].anim-in{opacity:1;transform:none!important}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+@keyframes glow{0%,100%{box-shadow:0 8px 32px rgba(37,211,102,.25)}50%{box-shadow:0 8px 48px rgba(37,211,102,.5)}}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--black)}::-webkit-scrollbar-thumb{background:var(--accent);border-radius:2px}
+@media (max-width:1100px){.projects-grid,.skills-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:768px){
+nav{padding:20px 24px}nav.scrolled{padding:14px 24px}.nav-links{display:none}.hamburger{display:flex}
+.hero{padding:0 24px 60px}.hero-stats{display:none}section{padding:70px 24px}
+.projects-grid{grid-template-columns:1fr}
+.about{grid-template-columns:1fr;gap:50px}.about-photo-frame{width:220px}
+footer{flex-direction:column;gap:12px;text-align:center;padding:24px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}[data-anim],.project-card,.skill-item{opacity:1!important;transform:none!important}}
+</style>
 </head>
 <body>
 
-  <div class="mobile-menu" id="mobileMenu">
-    <button class="menu-close" onclick="closeMenu()">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-      </svg>
-    </button>
-    <a href="#projects" onclick="closeMenu()">Projects</a>
-    <a href="#skills" onclick="closeMenu()">Skills</a>
-    <a href="#about" onclick="closeMenu()">About</a>
-    <a href="#contact" onclick="closeMenu()">Contact</a>
+<div class="mobile-menu" id="mobileMenu">
+  <button class="menu-close" onclick="closeMenu()" aria-label="Close menu"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  <a href="#projects" onclick="closeMenu()">Projects</a>
+  <a href="#skills" onclick="closeMenu()">Skills</a>
+  <a href="#about" onclick="closeMenu()">About</a>
+  <a href="#contact" onclick="closeMenu()">Contact</a>
+</div>
+
+<nav>
+  <a href="#" class="nav-logo">Dev Ajmal.</a>
+  <ul class="nav-links">
+    <li><a href="#projects">Projects</a></li><li><a href="#skills">Skills</a></li><li><a href="#about">About</a></li><li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Open menu"><div class="bar"></div><div class="bar"></div><div class="bar"></div></button>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div><div class="hero-line"></div>
+  <div class="hero-content">
+    <span class="hero-tag">🌍 Global Shopify Developer · India · UAE · USA</span>
+    <h1 class="hero-name">Ajmal<br /><span>Saeed</span></h1>
+    <p class="hero-title">E-Commerce Frontend Developer</p>
+    <p class="hero-desc">I build custom Shopify stores and e-commerce experiences — clean code, no shortcuts. B.Tech CSE student turning caffeine into conversion-ready storefronts.</p>
+    <div class="hero-cta"><a href="#projects" class="btn-primary">View Projects</a><a href="#contact" class="btn-secondary">Let’s Talk</a></div>
   </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">25+</div><div class="stat-label">Live Projects</div></div>
+    <div class="stat"><div class="stat-num">4th</div><div class="stat-label">Year B.Tech</div></div>
+    <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Lines of Code</div></div>
+  </div>
+</section>
 
-  <nav>
-    <a href="#" class="nav-logo">Dev Ajmal.</a>
-    <ul class="nav-links">
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    <button class="hamburger" id="hamburger" onclick="toggleMenu()">
-      <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-    </button>
-  </nav>
+<div class="divider" data-anim="zoom-in"></div>
 
-  <section class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-line"></div>
-    <div class="hero-content">
-      <span class="hero-tag">🌍 Global Shopify Developer · India · UAE · USA</span>
-      <h1 class="hero-name">Ajmal<br /><span>Saeed</span></h1>
-      <p class="hero-title">E-Commerce Frontend Developer</p>
-      <p class="hero-desc">I build custom Shopify stores and e-commerce experiences — clean code, no shortcuts. B.Tech CSE student turning caffeine into conversion-ready storefronts.</p>
-      <div class="hero-cta">
-        <a href="#projects" class="btn-primary">View Projects</a>
-        <a href="#contact" class="btn-secondary">Let's Talk</a>
-      </div>
+<section class="projects" id="projects">
+  <div class="section-inner">
+    <div class="section-tag" data-anim="fade-left">Selected Work</div>
+    <h2 class="section-title" data-anim="fade-up" data-delay="100">Stores We’ve<br />Launched</h2>
+    <p style="color:var(--gray);font-style:italic;margin-top:-40px;margin-bottom:48px;max-width:480px" data-anim="fade-up" data-delay="150">Every store here is a result of real collaboration — my code, my team’s effort.</p>
+    <div class="projects-grid" id="projectsGrid"></div>
+    <div style="text-align:center;margin-top:60px" data-anim="fade-up">
+      <p style="font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gray);margin-bottom:16px">And many more...</p>
+      <span style="display:inline-block;border:1px solid rgba(200,169,110,.4);color:var(--accent);padding:14px 36px;border-radius:100px;font-size:.9rem;letter-spacing:.08em;text-transform:uppercase;background:rgba(200,169,110,.05)">🚀 More Projects Coming Soon</span>
     </div>
-    <div class="hero-stats">
-      <div class="stat"><div class="stat-num">25+</div><div class="stat-label">Live Projects</div></div>
-      <div class="stat"><div class="stat-num">3rd</div><div class="stat-label">Year B.Tech</div></div>
-      <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Lines of Code</div></div>
+  </div>
+</section>
+
+<section class="skills" id="skills">
+  <div class="section-inner">
+    <div class="section-tag" data-anim="fade-left">What I Work With</div>
+    <h2 class="section-title" data-anim="fade-up" data-delay="100">Skills &amp;<br />Technologies</h2>
+    <div class="skills-grid">
+      <div class="skill-item"><div class="skill-icon">🛍️</div><div class="skill-name">Shopify</div><div class="skill-desc">Custom themes, storefronts &amp; e-commerce solutions built from scratch</div></div>
+      <div class="skill-item"><div class="skill-icon">💧</div><div class="skill-name">Liquid</div><div class="skill-desc">Shopify’s templating language for dynamic, data-driven stores</div></div>
+      <div class="skill-item"><div class="skill-icon">⚛️</div><div class="skill-name">React</div><div class="skill-desc">Modern UI components and interactive frontend experiences</div></div>
+      <div class="skill-item"><div class="skill-icon">▲</div><div class="skill-name">Next.js</div><div class="skill-desc">Fast, SEO-friendly web apps with server-side rendering</div></div>
+      <div class="skill-item"><div class="skill-icon">🎨</div><div class="skill-name">HTML &amp; CSS</div><div class="skill-desc">Pixel-perfect, responsive layouts with clean markup</div></div>
+      <div class="skill-item"><div class="skill-icon">⚡</div><div class="skill-name">JavaScript</div><div class="skill-desc">Dynamic interactions, custom features &amp; logic</div></div>
+      <div class="skill-item"><div class="skill-icon">🌊</div><div class="skill-name">Tailwind CSS</div><div class="skill-desc">Utility-first CSS framework for rapid, clean UI development</div></div>
+      <div class="skill-item"><div class="skill-icon">🏔️</div><div class="skill-name">Alpine.js</div><div class="skill-desc">Lightweight JS framework for interactive Shopify components</div></div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <div class="divider" data-anim="zoom-in" data-delay="0"></div>
-
-  <section class="projects" id="projects">
-    <div class="section-inner">
-      <div class="section-tag" data-anim="fade-left" data-delay="0">Selected Work</div>
-      <h2 class="section-title" data-anim="fade-up" data-delay="100">Stores  We've<br />Launched</h2>
-      <p style="font-size:0.95rem; color:var(--gray); font-style:italic; margin-top:-40px; margin-bottom:48px; max-width:480px;" data-anim="fade-up" data-delay="150">Every store here is a result of real collaboration — my code, my team's effort.</p>
-      <div class="projects-grid">
-
-        <a href="https://duchesskumari.com" target="_blank" class="project-card">
-          <img src="https://duchesskumari.com/cdn/shop/files/new-pic3.jpg?v=1775729479&width=800" alt="Duchess Kumari" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">Celebrity Brand · Fashion</span>
-            <h3 class="project-name">Duchess Kumari</h3>
-            <p class="project-desc">Luxury fashion store co-founded by Alka Suman, Miss Universe India Divita Rai & Adhyayan Suman.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-        <a href="https://shekharsumanfilmacademy.com" target="_blank" class="project-card">
-          <img src="shekhar.webp" alt="Shekhar Suman Film Academy" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">Celebrity · Film Academy</span>
-            <h3 class="project-name">Shekhar Suman Film Academy</h3>
-            <p class="project-desc">Digital home for one of Indian cinema's most recognised names. Custom-coded from scratch.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-        <a href="https://www.meuzeum.com" target="_blank" class="project-card">
-          <img src="meuzeum.webp" alt="Meuzeum" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">Fashion · Women's Wear</span>
-            <h3 class="project-name">Meuzeum</h3>
-            <p class="project-desc">Custom Shopify storefront for a women's fashion brand — built for speed, style, and seamless shopping.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-        <a href="https://carlabraga.in" target="_blank" class="project-card">
-          <img src="carla (1).webp" alt="Carla Braga" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">Fashion · Women's Footwear</span>
-            <h3 class="project-name">Carla Braga</h3>
-            <p class="project-desc">Women's fashion & footwear Shopify store with custom theme and conversion-focused layout.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-        <a href="https://www.tarrit.in" target="_blank" class="project-card">
-          <img src="tarrit.webp" alt="Tarrit" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">Men's Fashion · Premium</span>
-            <h3 class="project-name">Tarrit</h3>
-            <p class="project-desc">Premium men's shirts — Egyptian Giza cotton to Linen. Minimal, refined Shopify store.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-        <a href="https://authentikyou.com" target="_blank" class="project-card">
-          <img src="authentik.webp" alt="AuthentikYou" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">Sustainable · Gender-Free Fashion</span>
-            <h3 class="project-name">AuthentikYou</h3>
-            <p class="project-desc">Inclusive, gender-free clothing brand. Custom Shopify store celebrating individuality.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-        <a href="https://beosam.com" target="_blank" class="project-card">
-          <img src="beosam.webp" alt="BeOsam" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">Premium · Unisex Fashion</span>
-            <h3 class="project-name">BeOsam</h3>
-            <p class="project-desc">Premium unisex clothing — luxury fabric, purposeful design. Custom Shopify store.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-        <a href="https://cocuze.com" target="_blank" class="project-card">
-          <img src="cocu.webp" alt="Cocuze" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">Luxury · Home Décor & Art</span>
-            <h3 class="project-name">Cocuzè</h3>
-            <p class="project-desc">Regenerative design, home décor and gifts shaped by India's craft heritage.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-        <a href="https://godhulionlinestore.com" target="_blank" class="project-card">
-          <img src="godhuli (1).webp" alt="Godhuli" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">D2C · Online Store</span>
-            <h3 class="project-name">Godhuli</h3>
-            <p class="project-desc">Custom Shopify storefront with clean design and seamless shopping experience.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-        <a href="https://aarbab.com" target="_blank" class="project-card">
-          <img src="aarbab.webp" alt="Aarbab" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">Streetwear · Arabic Heritage</span>
-            <h3 class="project-name">Aarbab</h3>
-            <p class="project-desc">Premium streetwear rooted in Arabic culture. A mindset brand with a bold custom Shopify store.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-        <a href="https://sleepnslip.com" target="_blank" class="project-card">
-          <img src="slips.webp" alt="SleepNSlip" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">D2C · Comfort Wear</span>
-            <h3 class="project-name">SleepNSlip</h3>
-            <p class="project-desc">Cozy comfort wear D2C brand. Custom Shopify store with smooth category navigation.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-        <a href="https://www.crockerywala.com" target="_blank" class="project-card">
-          <img src="crockery.webp" alt="CrockeryWala" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">Home & Kitchen · Copper & Brass</span>
-            <h3 class="project-name">CrockeryWala</h3>
-            <p class="project-desc">Premium copper, bronze & brass kitchenware. Custom Shopify with rich product catalogue.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-        <a href="https://aimiofficial.com" target="_blank" class="project-card">
-          <img src="aimi.webp" alt="Aimi Official" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">Fashion · Women's Wear</span>
-            <h3 class="project-name">Aimi Official</h3>
-            <p class="project-desc">Custom Shopify storefront for a premium women's fashion brand.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-        <a href="https://mycutestickons.com" target="_blank" class="project-card">
-          <img src="cute.webp" alt="My Cute Stickons" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">D2C · Stationery & Gifts</span>
-            <h3 class="project-name">My Cute Stickons</h3>
-            <p class="project-desc">Fun, vibrant sticker & stationery store built on Shopify.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-        <a href="https://zroque.com" target="_blank" class="project-card">
-          <img src="zroque.webp" alt="Zroque" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">Fashion · Premium</span>
-            <h3 class="project-name">Zroque</h3>
-            <p class="project-desc">Premium fashion brand with a bold, custom Shopify storefront.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-        <a href="https://vitomoda.com" target="_blank" class="project-card">
-          <img src="vito.webp" alt="Vito Moda" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">Men's Fashion · Luxury</span>
-            <h3 class="project-name">Vito Moda</h3>
-            <p class="project-desc">Luxury menswear brand — refined Shopify store with elegant design.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-        <a href="https://theomna.in" target="_blank" class="project-card">
-          <img src="omna.webp" alt="The Omna" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">Fashion · D2C</span>
-            <h3 class="project-name">The Omna</h3>
-            <p class="project-desc">Clean, conversion-focused Shopify store for a modern fashion brand.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-        <a href="https://studioforth.in" target="_blank" class="project-card">
-          <img src="forth.webp" alt="Studio Forth" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">Lifestyle · Design Studio</span>
-            <h3 class="project-name">Studio Forth</h3>
-            <p class="project-desc">Lifestyle & design brand — custom Shopify with minimal, editorial feel.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-        <a href="https://sglabel.in" target="_blank" class="project-card">
-          <img src="sglabel.webp" alt="SG Label" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">Fashion · Label</span>
-            <h3 class="project-name">SG Label</h3>
-            <p class="project-desc">Fashion label with a sleek, custom Shopify storefront built for style.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-        <a href="https://shopsamae.com" target="_blank" class="project-card">
-          <img src="sanchi.webp" alt="Samae" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">Fashion · Women's Wear</span>
-            <h3 class="project-name">Samae</h3>
-            <p class="project-desc">Women's fashion Shopify store with smooth UX and custom theme.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-        <a href="https://labelinaara.in" target="_blank" class="project-card">
-          <img src="inaara.webp" alt="Label Inaara" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">Fashion · Women's Label</span>
-            <h3 class="project-name">Label Inaara</h3>
-            <p class="project-desc">Elegant women's fashion label — custom Shopify with refined aesthetics.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-        <a href="https://myneev.in" target="_blank" class="project-card">
-          <img src="neev.webp" alt="My Neev" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">D2C · Lifestyle</span>
-            <h3 class="project-name">My Neev</h3>
-            <p class="project-desc">Lifestyle D2C brand with a clean, fast Shopify storefront.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-        <a href="https://www.hatsoffaccessories.com" target="_blank" class="project-card">
-          <img src="hatsoff.webp" alt="Hats Off Accessories" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">Accessories · Fashion</span>
-            <h3 class="project-name">Hats Off Accessories</h3>
-            <p class="project-desc">Premium accessories brand — custom Shopify store built for style lovers.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-        <a href="https://bhutri.com" target="_blank" class="project-card">
-          <img src="bhutri.webp" alt="Bhutri" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">Food · D2C</span>
-            <h3 class="project-name">Bhutri</h3>
-            <p class="project-desc">D2C food brand with a vibrant, custom Shopify store.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-        <a href="https://www.aroqueperfume.com" target="_blank" class="project-card">
-          <img src="aroq.webp" alt="Aroque Perfume" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">Luxury · Fragrance</span>
-            <h3 class="project-name">Aroque Perfume</h3>
-            <p class="project-desc">Luxury fragrance brand — premium Shopify store with an immersive experience.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-        <a href="https://rossettecoffee.com" target="_blank" class="project-card">
-          <img src="rose.webp" alt="Rossette Coffee" class="project-img" />
-          <div class="project-overlay">
-            <span class="project-tag-pill">Food & Beverage · Coffee</span>
-            <h3 class="project-name">Rossette Coffee</h3>
-            <p class="project-desc">Artisan coffee brand — warm, inviting Shopify store for coffee lovers.</p>
-          </div>
-          <div class="project-arrow">↗</div>
-        </a>
-
-      </div>
-
-      <div style="text-align:center; margin-top: 60px;" data-anim="fade-up" data-delay="200">
-        <div style="display:inline-flex; flex-direction:column; align-items:center; gap:16px;">
-          <p style="font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gray);">And many more...</p>
-          <span style="display:inline-flex; align-items:center; gap:10px; border:1px solid rgba(200,169,110,0.4); color:var(--accent); padding:14px 36px; border-radius:100px; font-size:0.9rem; letter-spacing:0.08em; text-transform:uppercase; background:rgba(200,169,110,0.05);">
-            🚀 More Projects Coming Soon
-          </span>
-        </div>
-      </div>
-
+<section class="about" id="about">
+  <div class="about-photo" data-anim="fade-left">
+    <div class="about-photo-frame">
+      <img src="ajmal-new.png" alt="Ajmal Saeed — Shopify Developer" class="about-photo-img" />
+      <div class="about-photo-badge"><span>25+</span><small>Live Stores</small></div>
     </div>
-  </section>
-
-  <section class="skills" id="skills">
-    <div class="section-inner">
-      <div class="section-tag" data-anim="fade-left" data-delay="0">What I Work With</div>
-      <h2 class="section-title" data-anim="fade-up" data-delay="100">Skills &<br />Technologies</h2>
-      <div class="skills-grid">
-        <div class="skill-item"><div class="skill-icon">🛍️</div><div class="skill-name">Shopify</div><div class="skill-desc">Custom themes, storefronts & e-commerce solutions built from scratch</div></div>
-        <div class="skill-item"><div class="skill-icon">💧</div><div class="skill-name">Liquid</div><div class="skill-desc">Shopify's templating language for dynamic, data-driven stores</div></div>
-        <div class="skill-item"><div class="skill-icon">⚛️</div><div class="skill-name">React</div><div class="skill-desc">Modern UI components and interactive frontend experiences</div></div>
-        <div class="skill-item"><div class="skill-icon">▲</div><div class="skill-name">Next.js</div><div class="skill-desc">Fast, SEO-friendly web apps with server-side rendering</div></div>
-        <div class="skill-item"><div class="skill-icon">🎨</div><div class="skill-name">HTML & CSS</div><div class="skill-desc">Pixel-perfect, responsive layouts with clean markup</div></div>
-        <div class="skill-item"><div class="skill-icon">⚡</div><div class="skill-name">JavaScript</div><div class="skill-desc">Dynamic interactions, custom features & logic</div></div>
-        <div class="skill-item"><div class="skill-icon">🌊</div><div class="skill-name">Tailwind CSS</div><div class="skill-desc">Utility-first CSS framework for rapid, clean UI development</div></div>
-        <div class="skill-item"><div class="skill-icon">🏔️</div><div class="skill-name">Alpine.js</div><div class="skill-desc">Lightweight JS framework for interactive Shopify components</div></div>
-      </div>
+  </div>
+  <div class="about-text">
+    <div class="section-tag" data-anim="fade-left">About Me</div>
+    <h2 class="section-title" data-anim="fade-up" data-delay="100">Developer.<br />Student.<br />Builder.</h2>
+    <p class="about-para" data-anim="fade-up" data-delay="200">I’m Ajmal Saeed — a B.Tech CSE student in my 4th year, based in Delhi. I specialise in building e-commerce storefronts on Shopify using custom Liquid code, HTML, CSS, JavaScript and React.</p>
+    <p class="about-para" data-anim="fade-up" data-delay="300">I’ve worked on 25+ projects — from celebrity fashion brands to D2C stores. Every store I work on is clean, fast, and built to convert.</p>
+    <div class="about-highlights" data-anim="fade-up" data-delay="400">
+      <span class="about-highlight">🛍️ Shopify Expert</span><span class="about-highlight">⚡ Fast Delivery</span><span class="about-highlight">🎯 Conversion Focused</span><span class="about-highlight">💬 Client First</span><span class="about-highlight">🔥 25+ Live Stores</span>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ABOUT SECTION — Photo left, Text right -->
-  <section class="about" id="about">
-    <div class="about-photo" data-anim="fade-left" data-delay="0">
-      <div class="about-photo-frame">
-        <img src="ajmal-new.png" alt="Ajmal Saeed — Shopify Developer" class="about-photo-img" />
-        <div class="about-photo-badge">
-          <span>25+</span>
-          <small>Live Stores</small>
-        </div>
-      </div>
-    </div>
-    <div class="about-text">
-      <div class="section-tag" data-anim="fade-left" data-delay="0">About Me</div>
-      <h2 class="section-title" data-anim="fade-up" data-delay="100">Developer.<br />Student.<br />Builder.</h2>
-      <p class="about-para" data-anim="fade-up" data-delay="200">I'm Ajmal Saeed — a B.Tech CSE student in my 4th year, based in Delhi. I specialise in building e-commerce storefronts on Shopify using custom Liquid code, HTML, CSS, JavaScript and React.</p>
-      <p class="about-para" data-anim="fade-up" data-delay="300">I've worked on 25+ projects — from celebrity fashion brands to D2C stores. Every store I build is clean, fast, and built to convert.</p>
-      <div class="about-highlights" data-anim="fade-up" data-delay="400">
-        <span class="about-highlight">🛍️ Shopify Expert</span>
-        <span class="about-highlight">⚡ Fast Delivery</span>
-        <span class="about-highlight">🎯 Conversion Focused</span>
-        <span class="about-highlight">💬 Client First</span>
-        <span class="about-highlight">🔥 25+ Live Stores</span>
-      </div>
-    </div>
-  </section>
+<section class="contact" id="contact">
+  <div class="section-tag" data-anim="fade-up">Get In Touch</div>
+  <h2 class="contact-title" data-anim="zoom-in" data-delay="100">Let’s Build<br /><span>Together</span></h2>
+  <p class="contact-sub" data-anim="fade-up" data-delay="200">Have a Shopify store in mind? Let’s talk. I’m available for freelance projects and collaborations.</p>
+  <div class="contact-links" data-anim="fade-up" data-delay="300">
+    <a href="https://wa.me/918376909786" target="_blank" rel="noopener" class="contact-link whatsapp">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>WhatsApp</a>
+    <a href="https://www.instagram.com/codingbyajmal" target="_blank" rel="noopener" class="contact-link instagram">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>Instagram</a>
+  </div>
+</section>
 
-  <section class="contact" id="contact">
-    <div class="section-tag" data-anim="fade-up" data-delay="0">Get In Touch</div>
-    <h2 class="contact-title" data-anim="zoom-in" data-delay="100">Let's Build<br /><span>Together</span></h2>
-    <p class="contact-sub" data-anim="fade-up" data-delay="200">Have a Shopify store in mind? Let's talk. I'm available for freelance projects and collaborations.</p>
-    <div class="contact-links" data-anim="fade-up" data-delay="300">
-      <a href="https://wa.me/918376909786" target="_blank" class="contact-link whatsapp">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        WhatsApp
-      </a>
-      <a href="https://www.instagram.com/codingbyajmal" target="_blank" class="contact-link instagram">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-        Instagram
-      </a>
-    </div>
-  </section>
+<footer>
+  <div class="footer-logo">Ajmal Saeed</div>
+  <div class="footer-copy">© 2026 · E-Commerce Frontend Developer · Delhi, India</div>
+</footer>
 
-  <footer>
-    <div class="footer-logo">Ajmal Saeed</div>
-    <div class="footer-copy">© 2025 · E-Commerce Frontend Developer · Delhi, India</div>
-  </footer>
+<script>
+// Add a project = add one line here: [url, image, tag, name, description]
+const projects = [
+ ["https://duchesskumari.com","https://duchesskumari.com/cdn/shop/files/new-pic3.jpg?v=1775729479&width=800","Celebrity Brand · Fashion","Duchess Kumari","Luxury fashion store co-founded by Alka Suman, Miss Universe India Divita Rai & Adhyayan Suman."],
+ ["https://shekharsumanfilmacademy.com","shekhar.webp","Celebrity · Film Academy","Shekhar Suman Film Academy","Digital home for one of Indian cinema’s most recognised names. Custom-coded from scratch."],
+ ["https://www.meuzeum.com","meuzeum.webp","Fashion · Women’s Wear","Meuzeum","Custom Shopify storefront for a women’s fashion brand — built for speed, style, and seamless shopping."],
+ ["https://carlabraga.in","carla.webp","Fashion · Women’s Footwear","Carla Braga","Women’s fashion & footwear Shopify store with custom theme and conversion-focused layout."],
+ ["https://www.tarrit.in","tarrit.webp","Men’s Fashion · Premium","Tarrit","Premium men’s shirts — Egyptian Giza cotton to Linen. Minimal, refined Shopify store."],
+ ["https://authentikyou.com","authentik.webp","Sustainable · Gender-Free Fashion","AuthentikYou","Inclusive, gender-free clothing brand. Custom Shopify store celebrating individuality."],
+ ["https://beosam.com","beosam.webp","Premium · Unisex Fashion","BeOsam","Premium unisex clothing — luxury fabric, purposeful design. Custom Shopify store."],
+ ["https://cocuze.com","cocu.webp","Luxury · Home Décor & Art","Cocuzè","Regenerative design, home décor and gifts shaped by India’s craft heritage."],
+ ["https://godhulionlinestore.com","godhuli.webp","D2C · Online Store","Godhuli","Custom Shopify storefront with clean design and seamless shopping experience."],
+ ["https://aarbab.com","aarbab.webp","Streetwear · Arabic Heritage","Aarbab","Premium streetwear rooted in Arabic culture. A mindset brand with a bold custom Shopify store."],
+ ["https://sleepnslip.com","slips.webp","D2C · Comfort Wear","SleepNSlip","Cozy comfort wear D2C brand. Custom Shopify store with smooth category navigation."],
+ ["https://www.crockerywala.com","crockery.webp","Home & Kitchen · Copper & Brass","CrockeryWala","Premium copper, bronze & brass kitchenware. Custom Shopify with rich product catalogue."],
+ ["https://aimiofficial.com","aimi.webp","Fashion · Women’s Wear","Aimi Official","Custom Shopify storefront for a premium women’s fashion brand."],
+ ["https://mycutestickons.com","cute.webp","D2C · Stationery & Gifts","My Cute Stickons","Fun, vibrant sticker & stationery store built on Shopify."],
+ ["https://zroque.com","zroque.webp","Fashion · Premium","Zroque","Premium fashion brand with a bold, custom Shopify storefront."],
+ ["https://vitomoda.com","vito.webp","Men’s Fashion · Luxury","Vito Moda","Luxury menswear brand — refined Shopify store with elegant design."],
+ ["https://theomna.in","omna.webp","Fashion · D2C","The Omna","Clean, conversion-focused Shopify store for a modern fashion brand."],
+ ["https://studioforth.in","forth.webp","Lifestyle · Design Studio","Studio Forth","Lifestyle & design brand — custom Shopify with minimal, editorial feel."],
+ ["https://sglabel.in","sglabel.webp","Fashion · Label","SG Label","Fashion label with a sleek, custom Shopify storefront built for style."],
+ ["https://shopsamae.com","sanchi.webp","Fashion · Women’s Wear","Samae","Women’s fashion Shopify store with smooth UX and custom theme."],
+ ["https://labelinaara.in","inaara.webp","Fashion · Women’s Label","Label Inaara","Elegant women’s fashion label — custom Shopify with refined aesthetics."],
+ ["https://myneev.in","neev.webp","D2C · Lifestyle","My Neev","Lifestyle D2C brand with a clean, fast Shopify storefront."],
+ ["https://www.hatsoffaccessories.com","hatsoff.webp","Accessories · Fashion","Hats Off Accessories","Premium accessories brand — custom Shopify store built for style lovers."],
+ ["https://bhutri.com","bhutri.webp","Food · D2C","Bhutri","D2C food brand with a vibrant, custom Shopify store."],
+ ["https://www.aroqueperfume.com","aroq.webp","Luxury · Fragrance","Aroque Perfume","Luxury fragrance brand — premium Shopify store with an immersive experience."],
+ ["https://rossettecoffee.com","rose.webp","Food & Beverage · Coffee","Rossette Coffee","Artisan coffee brand — warm, inviting Shopify store for coffee lovers."],
+ // ── newly added (edit text to match your actual contribution) ──
+ ["https://rafylondon.com/","rafy.webp","Fashion · Women’s Wear · London","Rafy London","Minimalist, plugin-free custom Shopify store built with Liquid, Alpine.js and Tailwind."],
+ ["","navii.webp","Jewellery · CRO · Gurgaon","Navii","Conversion-focused custom Shopify store for a jewellery brand."],
+ ["","yellowmuslin.webp","Home Décor · Noida","Yellow Muslin","Custom Shopify store for a home décor brand."],
+ ["","printsandlace.webp","Fashion · D2C","Printsandlace","Custom Shopify storefront with clean, conversion-focused design."],
+ ["","quirky.webp","D2C · Lifestyle","Quirky Tales","Custom Shopify storefront with clean, conversion-focused design."],
+ ["https://www.madrigalstudios.com/","madrigal.webp","Studio · Website","Madrigal Studios","Custom-built website for a creative studio."],
+ ["https://www.myprofitprofessionals.com/","profit.webp","Business · Website","My Profit Professionals","Custom-built business website."]
+];
 
-  <script>
-    function toggleMenu() {
-      document.getElementById('mobileMenu').classList.toggle('open');
-      document.getElementById('hamburger').classList.toggle('open');
+const grid = document.getElementById('projectsGrid');
+projects.forEach(([url, img, tag, name, desc]) => {
+  const el = document.createElement(url ? 'a' : 'div');
+  el.className = 'project-card';
+  el.dataset.name = name;
+  if (url) { el.href = url; el.target = '_blank'; el.rel = 'noopener'; }
+  el.innerHTML =
+    '<img src="' + img + '" alt="' + name + '" class="project-img" loading="lazy" onerror="this.style.visibility=\'hidden\'" />' +
+    '<div class="project-overlay"><span class="project-tag-pill">' + tag + '</span>' +
+    '<h3 class="project-name">' + name + '</h3><p class="project-desc">' + desc + '</p></div>' +
+    (url ? '<div class="project-arrow">↗</div>' : '');
+  grid.appendChild(el);
+});
+
+function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('hamburger').classList.toggle('open')}
+function closeMenu(){document.getElementById('mobileMenu').classList.remove('open');document.getElementById('hamburger').classList.remove('open')}
+window.addEventListener('scroll',()=>document.querySelector('nav').classList.toggle('scrolled',window.scrollY>40));
+
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('anim-in'), parseInt(e.target.dataset.delay || 0));
+      io.unobserve(e.target);
     }
-    function closeMenu() {
-      document.getElementById('mobileMenu').classList.remove('open');
-      document.getElementById('hamburger').classList.remove('open');
-    }
-    window.addEventListener('scroll', () => {
-      document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 40);
-    });
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const delay = parseInt(entry.target.dataset.delay || 0);
-          setTimeout(() => entry.target.classList.add('anim-in'), delay);
-          io.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12 });
-    document.querySelectorAll('[data-anim]').forEach(el => io.observe(el));
-    document.querySelectorAll('.project-card').forEach((el, i) => {
-      el.dataset.delay = i * 70;
-      io.observe(el);
-    });
-    document.querySelectorAll('.skill-item').forEach((el, i) => {
-      el.dataset.delay = i * 60;
-      io.observe(el);
-    });
-    const footerObs = new IntersectionObserver(entries => {
-      entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('anim-in'); footerObs.unobserve(e.target); } });
-    }, { threshold: 0.2 });
-    footerObs.observe(document.querySelector('footer'));
-  </script>
-
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('[data-anim]').forEach(el => io.observe(el));
+document.querySelectorAll('.project-card').forEach((el, i) => { el.dataset.delay = (i % 4) * 70; io.observe(el); });
+document.querySelectorAll('.skill-item').forEach((el, i) => { el.dataset.delay = i * 60; io.observe(el); });
+</script>
 </body>
 </html>
